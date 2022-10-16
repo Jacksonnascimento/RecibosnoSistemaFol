@@ -24,7 +24,7 @@ public class ArquivoXML {
    private static String matricula;
    private static String tipoEvento;
    
-    public void infXML (File arquivo) throws ParserConfigurationException, SAXException 
+    public void infXML (File arquivo, String tipoArquivoEve) throws ParserConfigurationException, SAXException 
     { 
         try {
             //File file = new File("E:\\Jackson\\GitHub\\RecibosnoSistemaFol\\ID1137989050000002022092618390800633.S-2200.xml");
@@ -33,8 +33,16 @@ public class ArquivoXML {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document document = db.parse(file);
             document.getDocumentElement().normalize();
-            //System.out.println("Root Element :" + document.getDocumentElement().getNodeName());
-            NodeList nList = document.getElementsByTagName("evtAdmissao");
+            System.out.println("Root Element :" + document.getDocumentElement().getNodeName());
+            
+            if("2200.xml".equals(tipoArquivoEve)){
+                tipoEvento = "evtAdmissao";
+            }else if("2299.xml".equals(tipoArquivoEve)){
+                tipoEvento = "evtDeslig";
+            }
+            NodeList nList = document.getElementsByTagName(tipoEvento);
+            
+            
            
             for (int temp = 0; temp < nList.getLength(); temp++) {
                 Node nNode = nList.item(temp);

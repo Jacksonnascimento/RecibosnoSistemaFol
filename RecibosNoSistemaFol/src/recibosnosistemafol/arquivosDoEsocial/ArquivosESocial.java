@@ -25,4 +25,17 @@ public class ArquivosESocial {
         
         banco.update(update);
     }
+    
+    
+    public void s2299(String matricula, String recibo) {
+        banco = new BancoDados();
+        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
+                + "SET ECO_RECIBO = '%s'\n"
+                + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2299 S2 \n"
+                + "ON S2.CHAVE = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-2299'\n"
+                + "\n"
+                + "WHERE S2.matricula = %s", recibo, matricula);
+        
+        banco.update(update);
+    }
 }

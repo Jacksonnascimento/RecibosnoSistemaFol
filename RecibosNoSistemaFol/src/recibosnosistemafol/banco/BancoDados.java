@@ -10,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -24,14 +26,15 @@ public class BancoDados {
                 + "encrypt=false;"
                 + "trustServerCertificate=false;"
                 + "loginTimeout=30;";
-    
+        
     
     public void update(String query){
             try ( Connection connection = DriverManager.getConnection(connectionUrl);  PreparedStatement prepsInsertProduct = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
                 prepsInsertProduct.execute();
                System.out.println(query);
-                connection.close();
-            } catch (SQLException e) {
+                connection.close();  
+                JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
+            } catch (SQLException e) {             
             }
         }
     
