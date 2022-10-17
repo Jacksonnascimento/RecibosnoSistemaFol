@@ -31,7 +31,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     public TelaAdicionarVariosRecibos() {
         initComponents();
         txServidor.setText("localhost");
-        caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\AR");
+        caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos");
     }
     
     public void addRecibosBanco(){
