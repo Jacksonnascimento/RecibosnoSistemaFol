@@ -90,6 +90,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        String caminhoArquivo = caminho.getText();
+       String endeBanco = "localhost";
+       String database = "FPG_WEB_PM_ITAPETINGA";
+       String user = "sa";
+       String senha = "87519023";
+       
         try ( DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminhoArquivo))) {
             for (Path file : stream) {
                 File arquivoFile = file.toFile();
@@ -115,12 +120,12 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     if ("evtAdmissao".equals(arquivoXML.getTipoEvento())) {
 
                         //JOptionPane.showMessageDialog(null, arquivoXML.getId());
-                        esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo());
+                        esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), endeBanco, database, user, senha);
                     }
 
                     if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
                         JOptionPane.showMessageDialog(null, "S-2299");
-                        esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo());
+                        esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), endeBanco, database, user, senha);
                     }
 
                     System.out.println(file.getFileName());

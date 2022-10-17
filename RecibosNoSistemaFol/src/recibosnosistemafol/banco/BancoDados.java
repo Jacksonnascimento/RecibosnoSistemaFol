@@ -18,14 +18,25 @@ import javax.swing.JOptionPane;
  * @author jacks
  */
 public class BancoDados {
-      String connectionUrl
-                = "jdbc:sqlserver://localhost:1433;" 
-                + "database=FPG_WEB_PM_ITAPETINGA;"
-                + "user=sa;"
-                + "password=87519023;"
+    String connectionUrl;
+    
+    public BancoDados(String endeBanco, String database, String user, String senha){
+        
+        System.out.println("teste");
+        connectionUrl
+                
+                = String.format("jdbc:sqlserver://%s:1433;" 
+                + "database=%s;"
+                + "user=%s;"
+                + "password=%s;"
                 + "encrypt=false;"
                 + "trustServerCertificate=false;"
-                + "loginTimeout=30;";
+                + "loginTimeout=30;", endeBanco, database, user, senha);
+        
+        System.out.println(connectionUrl);
+    }
+      
+                
         
     
     public void update(String query){
