@@ -42,6 +42,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         String user = txUsuario.getText();
         String senha = txSenha.getText();
         int cont = 0;
+        int i = 0;
         try ( DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminhoArquivo))) {
             for (Path file : stream) {
                 File arquivoFile = file.toFile();
@@ -56,7 +57,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
                 if ("evtAdmissao".equals(arquivoXML.getTipoEvento()) || "evtDeslig".equals(arquivoXML.getTipoEvento())) {
 
-                    int i = JOptionPane.showConfirmDialog(
+                    i = JOptionPane.showConfirmDialog(
                             null,
                             String.format("Deseja adicionar o arquivo de ID: %s?", arquivoXML.getId()),
                             "Continua",
