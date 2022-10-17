@@ -39,4 +39,16 @@ public class ArquivosESocial {
         
         banco.update(update);
     }
+    
+    public void s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
+        banco = new BancoDados(servidor, database, user, senha);
+        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
+                + "SET ECO_RECIBO = '%s'\n"
+                + "FROM FPG_REGISTROS_ESOCIAL_S_1200 FE\n"
+                + "INNER JOIN ESOCIAL_CONTROLA_ENVIO ECE\n"
+                + "ON FE.PES_COD = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-1200'\n"
+                + "WHERE FE.cpfTrab = '%s' AND FE.perApur = '%s'", recibo, perApur);
+        banco.update(update);
+    
+    }
 }

@@ -23,6 +23,7 @@ public class ArquivoXML {
    private static String cpf;
    private static String matricula;
    private static String tipoEvento;
+   private static String perApur;
    
     public void infXML (File arquivo, String tipoArquivoEve) throws ParserConfigurationException, SAXException 
     { 
@@ -39,6 +40,8 @@ public class ArquivoXML {
                 tipoEvento = "evtAdmissao";
             }else if("2299.xml".equals(tipoArquivoEve)){
                 tipoEvento = "evtDeslig";
+            } else if("1200.xml".equals(tipoArquivoEve)){
+                tipoEvento = "evtRemun";
             }
             NodeList nList = document.getElementsByTagName(tipoEvento);
             
@@ -52,6 +55,10 @@ public class ArquivoXML {
                     id = eElement.getAttribute("Id");
                     cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
                     matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
+                    if ("1200.xml".equals(tipoArquivoEve)) {
+                        perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();
+                        System.out.println(perApur);
+                    }
                     
                 }
             }
@@ -108,6 +115,10 @@ public class ArquivoXML {
      */
     public static String getTipoEvento() {
         return tipoEvento;
+    }
+
+    public static String getPerApur() {
+        return perApur;
     }
     
     

@@ -70,9 +70,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                             esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
                         } else if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
                             esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
-                        }
+                        } 
 
                     }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Não é possível o evento desse arquivo. Arquivo: " +  tipo[1]);
                 }
 
                 
