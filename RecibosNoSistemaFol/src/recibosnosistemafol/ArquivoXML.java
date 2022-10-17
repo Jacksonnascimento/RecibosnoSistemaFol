@@ -33,7 +33,7 @@ public class ArquivoXML {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document document = db.parse(file);
             document.getDocumentElement().normalize();
-            System.out.println("Root Element :" + document.getDocumentElement().getNodeName());
+            System.out.println(document.getDocumentElement().getNodeName());
             
             if("2200.xml".equals(tipoArquivoEve)){
                 tipoEvento = "evtAdmissao";
