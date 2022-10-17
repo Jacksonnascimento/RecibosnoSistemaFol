@@ -63,19 +63,19 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                             "Continua",
                             JOptionPane.OK_CANCEL_OPTION
                     );
+                    
+                    if (i == 0) {
+                        cont++;
+                        if ("evtAdmissao".equals(arquivoXML.getTipoEvento())) {
+                            esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
+                        } else if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
+                            esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
+                        }
+
+                    }
                 }
 
-                if (i == 0) {
-                    cont++;
-                    if ("evtAdmissao".equals(arquivoXML.getTipoEvento())) {
-                        esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
-                    }
-
-                    if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
-                        esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
-                    }
-
-                }
+                
 
             }
         } catch (IOException | DirectoryIteratorException ex) {
