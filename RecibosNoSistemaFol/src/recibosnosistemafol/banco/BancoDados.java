@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 public class BancoDados {
     String connectionUrl;
     
-    public BancoDados(String endeBanco, String database, String user, String senha){
+    public BancoDados(String servidor, String database, String user, String senha){
         
         System.out.println("teste");
         connectionUrl
@@ -31,7 +31,7 @@ public class BancoDados {
                 + "password=%s;"
                 + "encrypt=false;"
                 + "trustServerCertificate=false;"
-                + "loginTimeout=30;", endeBanco, database, user, senha);
+                + "loginTimeout=30;", servidor, database, user, senha);
         
         System.out.println(connectionUrl);
     }

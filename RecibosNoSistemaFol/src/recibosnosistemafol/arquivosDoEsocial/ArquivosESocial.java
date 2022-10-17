@@ -14,8 +14,8 @@ public class ArquivosESocial {
 
     BancoDados banco;
     
-    public void s2200(String matricula, String recibo, String endeBanco, String database, String user, String senha) {
-        banco = new BancoDados(endeBanco, database, user, senha);
+    public void s2200(String matricula, String recibo, String servidor, String database, String user, String senha) {
+        banco = new BancoDados(servidor, database, user, senha);
         String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
                 + "SET ECO_RECIBO = '%s'\n"
                 + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2200 S2 \n"
@@ -28,8 +28,8 @@ public class ArquivosESocial {
     }
     
     
-    public void s2299(String matricula, String recibo, String endeBanco, String database, String user, String senha) {
-       banco = new BancoDados(endeBanco, database, user, senha);
+    public void s2299(String matricula, String recibo, String servidor, String database, String user, String senha) {
+       banco = new BancoDados(servidor, database, user, senha);
         String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
                 + "SET ECO_RECIBO = '%s'\n"
                 + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2299 S2 \n"
