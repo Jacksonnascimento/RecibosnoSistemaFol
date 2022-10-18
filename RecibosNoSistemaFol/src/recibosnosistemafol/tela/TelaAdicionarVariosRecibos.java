@@ -5,7 +5,9 @@
 package recibosnosistemafol.tela;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -43,6 +45,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     
     public void addbases(){
         model = new DefaultListModel();
+        model.addElement("Salvar arquivo.txt");
         model.addElement("PM Itapetinga - PC Jack");
         model.addElement("PM Cocos - PC Jack");
              
@@ -63,15 +66,18 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             database = "FPG_WEB_CM_COCOS";
             user = "sa";
             senha = "87519023";
+        } else if ("Salvar arquivo.txt".equals(bases.getSelectedValue())){
+            servidor = "txt";
         }
     }
     
-    public void addRecibosBanco(){
+    public void addRecibosBanco() throws IOException{
         
+        String arquivoUpdate = "";
         
         selecionarBase();
         
-        
+        String arquivosNaoAdd = "";
         String caminhoArquivo = caminho.getText();
 
         
@@ -82,11 +88,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 File arquivoFile = file.toFile();
 
                 String[] tipo = arquivoFile.getName().split("-");
-
                 ArquivoXML arquivoXML = new ArquivoXML();
-
                 arquivoXML.infXML(arquivoFile, tipo[1]);
-
+                
                 ArquivosESocial esocial = new ArquivosESocial();
 
                 if ("evtAdmissao".equals(arquivoXML.getTipoEvento()) 
@@ -94,6 +98,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                         || "evtRemun".equals(arquivoXML.getTipoEvento())
                    ) 
                 {
+
+                   
 
                     i = JOptionPane.showConfirmDialog(
                             null,
@@ -105,17 +111,20 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     if (i == 0) {
                         cont++;
                         if ("evtAdmissao".equals(arquivoXML.getTipoEvento())) {
-                          esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
+                            arquivoUpdate += 
+                                 esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n" ;
                         } else if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
-                           esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
+                            arquivoUpdate += 
+                                esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n" ;
                         } else if ("evtRemun".equals(arquivoXML.getTipoEvento())){
-                            esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(), arquivoXML.getPerApur(), servidor, database, user, senha);
-                        }
+                            arquivoUpdate += 
+                                esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(), arquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n" ;
+                        } 
 
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Não é possível o evento desse arquivo. Arquivo: " +  tipo[1]);
-                }
+                            arquivosNaoAdd += arquivoFile.getName() + "\n";
+                       }
 
                 
 
@@ -129,6 +138,19 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
 
         JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
+        if(!"".equals(arquivosNaoAdd)){
+            JOptionPane.showMessageDialog(null, "Arquivos que não foram enviados: " + arquivosNaoAdd);
+        }
+        
+        if ("txt".equals(servidor)) {
+            FileWriter arquivoResultado = new FileWriter("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado.sql");
+            PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+            
+            gravarInfoAr.printf(arquivoUpdate);
+            
+            arquivoResultado.close();
+
+        }
     }
 
     /**
@@ -214,7 +236,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       addRecibosBanco();
+            try {
+                addRecibosBanco();
+            } catch (IOException ex) {
+                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+            }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

@@ -14,8 +14,8 @@ public class ArquivosESocial {
 
     BancoDados banco;
     
-    public void s2200(String matricula, String recibo, String servidor, String database, String user, String senha) {
-        banco = new BancoDados(servidor, database, user, senha);
+    public String s2200(String matricula, String recibo, String servidor, String database, String user, String senha) {
+        
         String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
                 + "SET ECO_RECIBO = '%s'\n"
                 + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2200 S2 \n"
@@ -23,13 +23,17 @@ public class ArquivosESocial {
                 + "\n"
                 + "WHERE S2.matricula = %s", recibo, matricula);
         
-      
-        banco.update(update);
+        if(!"txt".equals(servidor)){
+            banco = new BancoDados(servidor, database, user, senha);
+            banco.update(update);
+        }
+        
+        return update;
     }
     
     
-    public void s2299(String matricula, String recibo, String servidor, String database, String user, String senha) {
-       banco = new BancoDados(servidor, database, user, senha);
+    public String s2299(String matricula, String recibo, String servidor, String database, String user, String senha) {
+       
         String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
                 + "SET ECO_RECIBO = '%s'\n"
                 + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2299 S2 \n"
@@ -37,18 +41,32 @@ public class ArquivosESocial {
                 + "\n"
                 + "WHERE S2.matricula = %s", recibo, matricula);
         
-        banco.update(update);
+        if(!"txt".equals(servidor)){
+            banco = new BancoDados(servidor, database, user, senha);
+            banco.update(update);
+        }
+        
+        
+        return update;
+        
     }
     
-    public void s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
-        banco = new BancoDados(servidor, database, user, senha);
+    public String s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
+        
         String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
                 + "SET ECO_RECIBO = '%s'\n"
                 + "FROM FPG_REGISTROS_ESOCIAL_S_1200 FE\n"
                 + "INNER JOIN ESOCIAL_CONTROLA_ENVIO ECE\n"
                 + "ON FE.PES_COD = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-1200'\n"
                 + "WHERE FE.cpfTrab = '%s' AND FE.perApur = '%s'", recibo, cpf, perApur);
-        banco.update(update);
+        
+        
+        if(!"txt".equals(servidor)){
+            banco = new BancoDados(servidor, database, user, senha);
+            banco.update(update);
+        } 
+        
+        return update;
     
     }
 }

@@ -24,6 +24,7 @@ public class ArquivoXML {
    private static String matricula;
    private static String tipoEvento;
    private static String perApur;
+  
    
     public void infXML (File arquivo, String tipoArquivoEve) throws ParserConfigurationException, SAXException 
     { 
@@ -42,43 +43,44 @@ public class ArquivoXML {
                 tipoEvento = "evtDeslig";
             } else if("1200.xml".equals(tipoArquivoEve)){
                 tipoEvento = "evtRemun";
+            } else {
+                tipoEvento = "n";
             }
-            NodeList nList = document.getElementsByTagName(tipoEvento);
             
-            
-           
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                Node nNode = nList.item(temp);
-                tipoEvento = nNode.getNodeName();
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;
-                    id = eElement.getAttribute("Id");
-                    cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
-                    matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
-                    if ("1200.xml".equals(tipoArquivoEve)) {
-                        perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();                       
+            if(!"n".equals(tipoEvento)){
+             
+                NodeList nList = document.getElementsByTagName(tipoEvento);
+
+                for (int temp = 0; temp < nList.getLength(); temp++) {
+                    Node nNode = nList.item(temp);
+                    tipoEvento = nNode.getNodeName();
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element eElement = (Element) nNode;
+                        id = eElement.getAttribute("Id");
+                        cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
+                        matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
+                        if ("1200.xml".equals(tipoArquivoEve)) {
+                            perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();
+                        }
+
                     }
-                    
                 }
+                
+                nList = null;
+                nList = document.getElementsByTagName("retornoEvento");
+                for (int temp = 0; temp < nList.getLength(); temp++) {
+                    Node nNode = nList.item(temp);
+                    // System.out.println("\nCurrent Element :" + nNode.getNodeName());
+                    if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element eElement = (Element) nNode;
+                        recibo = eElement.getElementsByTagName("nrRecibo").item(0).getTextContent();
+
+                    }
+                } 
             }
-            
-            
-            
-            nList = null;
-            nList = document.getElementsByTagName("retornoEvento");
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                Node nNode = nList.item(temp);
-               // System.out.println("\nCurrent Element :" + nNode.getNodeName());
-                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-                    Element eElement = (Element) nNode;                    
-                    recibo = eElement.getElementsByTagName("nrRecibo").item(0).getTextContent();
-                    
-                }
-            }
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             System.out.println(e);
-        } 
+        }
     }
 
     /**
