@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -24,23 +25,56 @@ import recibosnosistemafol.arquivosDoEsocial.ArquivosESocial;
  * @author Jackson
  */
 public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
-
+        DefaultListModel model = new DefaultListModel();
+        String servidor;
+        String database;
+        String user;
+        String senha;
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
     public TelaAdicionarVariosRecibos() {
         initComponents();
+        addbases();
         txServidor.setText("localhost");
         caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos");
+        
+    }
+    
+    public void addbases(){
+        model = new DefaultListModel();
+        model.addElement("PM Itapetinga - PC Jack");
+        model.addElement("PM Cocos - PC Jack");
+             
+         
+        bases.setModel(model);
+    }
+    
+    public void selecionarBase(){
+        
+        System.out.println(bases.getSelectedValue());
+        if("PM Itapetinga - PC Jack".equals(bases.getSelectedValue())){
+            servidor = "localhost";
+            database = "FPG_WEB_PM_ITAPETINGA";
+            user = "sa";
+            senha = "87519023";
+        } else if("PM Cocos - PC Jack".equals(bases.getSelectedValue())){
+            servidor = "localhost";
+            database = "FPG_WEB_CM_COCOS";
+            user = "sa";
+            senha = "87519023";
+        }
     }
     
     public void addRecibosBanco(){
+        
+        
+        selecionarBase();
+        
+        
         String caminhoArquivo = caminho.getText();
 
-        String servidor = txServidor.getText();
-        String database = txDatabase.getText();
-        String user = txUsuario.getText();
-        String senha = txSenha.getText();
+        
         int cont = 0;
         int i = 0;
         try ( DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminhoArquivo))) {
@@ -55,7 +89,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
                 ArquivosESocial esocial = new ArquivosESocial();
 
-                if ("evtAdmissao".equals(arquivoXML.getTipoEvento()) || "evtDeslig".equals(arquivoXML.getTipoEvento())) {
+                if ("evtAdmissao".equals(arquivoXML.getTipoEvento()) 
+                        || "evtDeslig".equals(arquivoXML.getTipoEvento())
+                        || "evtRemun".equals(arquivoXML.getTipoEvento())
+                   ) 
+                {
 
                     i = JOptionPane.showConfirmDialog(
                             null,
@@ -67,10 +105,12 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     if (i == 0) {
                         cont++;
                         if ("evtAdmissao".equals(arquivoXML.getTipoEvento())) {
-                            esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
+                          esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
                         } else if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
-                            esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
-                        } 
+                           esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha);
+                        } else if ("evtRemun".equals(arquivoXML.getTipoEvento())){
+                            esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(), arquivoXML.getPerApur(), servidor, database, user, senha);
+                        }
 
                     }
                 } else {
@@ -100,17 +140,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        txServidor = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         caminho = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        txServidor = new javax.swing.JTextField();
-        txDatabase = new javax.swing.JTextField();
-        txUsuario = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        txSenha = new javax.swing.JPasswordField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        bases = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -123,15 +159,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Servidor");
+        jLabel2.setText("Bases");
 
-        jLabel3.setText("Database");
-
-        jLabel4.setText("Usuário");
-
-        jLabel5.setText("Senha");
-
-        txSenha.setText("jPasswordField1");
+        bases.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(bases);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -140,66 +175,39 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(txServidor, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(caminho))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(txUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
-                .addGap(53, 53, 53))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(43, 43, 43)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(62, 62, 62))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(83, 83, 83)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(131, 131, 131)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(84, 84, 84)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 8, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txDatabase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txSenha, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addGap(46, 46, 46))
+                .addGap(16, 16, 16))
         );
 
         pack();
@@ -245,16 +253,12 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JList<String> bases;
     private javax.swing.JTextField caminho;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField txDatabase;
-    private javax.swing.JPasswordField txSenha;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txServidor;
-    private javax.swing.JTextField txUsuario;
     // End of variables declaration//GEN-END:variables
 }

@@ -47,7 +47,7 @@ public class ArquivosESocial {
                 + "FROM FPG_REGISTROS_ESOCIAL_S_1200 FE\n"
                 + "INNER JOIN ESOCIAL_CONTROLA_ENVIO ECE\n"
                 + "ON FE.PES_COD = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-1200'\n"
-                + "WHERE FE.cpfTrab = '%s' AND FE.perApur = '%s'", recibo, perApur);
+                + "WHERE FE.cpfTrab = '%s' AND FE.perApur = '%s'", recibo, cpf, perApur);
         banco.update(update);
     
     }

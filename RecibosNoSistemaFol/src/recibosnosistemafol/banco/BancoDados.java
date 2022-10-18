@@ -19,10 +19,11 @@ import javax.swing.JOptionPane;
  */
 public class BancoDados {
     String connectionUrl;
+    ResultSet resultSet = null;
     
     public BancoDados(String servidor, String database, String user, String senha){
         
-        System.out.println("teste");
+        
         connectionUrl
                 
                 = String.format("jdbc:sqlserver://%s:1433;" 
@@ -33,9 +34,48 @@ public class BancoDados {
                 + "trustServerCertificate=false;"
                 + "loginTimeout=30;", servidor, database, user, senha);
         
-        System.out.println(connectionUrl);
+        System.out.println("connectionUrl");
     }
-      
+    
+    public BancoDados(){
+         connectionUrl
+                = "jdbc:sqlserver://191.233.29.0:1433;" //servidor Azure
+                + "database=Sistema_Faturamento;"
+                + "user=sa;"
+                + "password=@jn87519023;"
+                + "encrypt=false;"
+                + "trustServerCertificate=false;"
+                + "loginTimeout=30;";
+
+        
+    }
+    
+    
+     public String select(String query, int quantColunas){
+        String resultado = "";
+         try ( Connection connection = DriverManager.getConnection(connectionUrl);  Statement statement = connection.createStatement();) {
+
+                String selectSql = query;
+                resultSet = statement.executeQuery(selectSql);
+
+                while (resultSet.next()) {
+                    for (int i = 1; i <= quantColunas; i++) {
+                        resultado += resultSet.getString(i) + ",";
+
+                    }
+
+                    resultado += "\n";
+
+                }
+                System.out.println(selectSql);
+                connection.close();
+                
+                return resultado;
+            } catch (SQLException e) {
+            }
+         
+         return null;
+    }
                 
         
     

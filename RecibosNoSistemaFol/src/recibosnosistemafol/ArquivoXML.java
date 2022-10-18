@@ -34,7 +34,7 @@ public class ArquivoXML {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document document = db.parse(file);
             document.getDocumentElement().normalize();
-            System.out.println(document.getDocumentElement().getNodeName());
+            //System.out.println(document.getDocumentElement().getNodeName());
             
             if("2200.xml".equals(tipoArquivoEve)){
                 tipoEvento = "evtAdmissao";
@@ -56,8 +56,7 @@ public class ArquivoXML {
                     cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
                     matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
                     if ("1200.xml".equals(tipoArquivoEve)) {
-                        perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();
-                        System.out.println(perApur);
+                        perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();                       
                     }
                     
                 }
