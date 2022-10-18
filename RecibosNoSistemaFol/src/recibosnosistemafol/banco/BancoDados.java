@@ -34,13 +34,13 @@ public class BancoDados {
                 + "trustServerCertificate=false;"
                 + "loginTimeout=30;", servidor, database, user, senha);
         
-        System.out.println("connectionUrl");
+        System.out.println(connectionUrl);
     }
     
     public BancoDados(){
          connectionUrl
                 = "jdbc:sqlserver://191.233.29.0:1433;" //servidor Azure
-                + "database=Sistema_Faturamento;"
+                + "database=bancoDados;"
                 + "user=sa;"
                 + "password=@jn87519023;"
                 + "encrypt=false;"
