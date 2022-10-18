@@ -143,6 +143,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
         
         if ("txt".equals(servidor)) {
+            
             FileWriter arquivoResultado = new FileWriter("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado.sql");
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
             
