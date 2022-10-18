@@ -13,6 +13,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -55,7 +56,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     
     public void selecionarBase(){
         
-        System.out.println(bases.getSelectedValue());
         if("PM Itapetinga - PC Jack".equals(bases.getSelectedValue())){
             servidor = "localhost";
             database = "FPG_WEB_PM_ITAPETINGA";
@@ -143,8 +143,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
         
         if ("txt".equals(servidor)) {
+            Date date = new Date();
             
-            FileWriter arquivoResultado = new FileWriter("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado.sql");
+            String caminhoarquivoResultado = 
+                    String.format("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado%s.sql", 
+                    date.getTime() + date.getDay() + date.getYear());
+            
+            FileWriter arquivoResultado = new FileWriter(caminhoarquivoResultado);
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
             
             gravarInfoAr.printf(arquivoUpdate);
