@@ -38,7 +38,7 @@ public class BancoDados {
     public BancoDados() {
         connectionUrl
                 = "jdbc:sqlserver://191.233.29.0:1433;" //servidor Azure
-                + "database=bancoDados;"
+                + "database=RECIBOS_BASES;"
                 + "user=sa;"
                 + "password=@jn87519023;"
                 + "encrypt=false;"

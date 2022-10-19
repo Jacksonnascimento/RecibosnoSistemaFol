@@ -53,13 +53,17 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         caminho.setText(caminhoDist + "\\ArquivosXML");         */      
     }
     
+    public void model(){
+        model = new DefaultListModel();
+        model.addElement("Salvar arquivo.txt");
+    }
    
 
     public void addbases() throws URISyntaxException {
         
         
                         
-        model = new DefaultListModel();
+        
         model.addElement("Salvar arquivo.txt");
         model.addElement("PM Itapetinga - PC Jack");
         model.addElement("PM Cocos - PC Jack");
@@ -69,17 +73,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     public void selecionarBase() {
 
-        if ("PM Itapetinga - PC Jack".equals(bases.getSelectedValue())) {
-            servidor = "localhost";
-            database = "FPG_WEB_PM_ITAPETINGA";
-            user = "sa";
-            senha = "87519023";
-        } else if ("PM Cocos - PC Jack".equals(bases.getSelectedValue())) {
-            servidor = "localhost";
-            database = "FPG_WEB_CM_COCOS";
-            user = "sa";
-            senha = "87519023";
-        } else if ("Salvar arquivo.txt".equals(bases.getSelectedValue())) {
+       if ("Salvar arquivo.txt".equals(bases.getSelectedValue())) {
             servidor = "txt";
         }
     }
@@ -186,10 +180,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         txServidor = new javax.swing.JTextField();
         caminho = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         bases = new javax.swing.JList<>();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -200,8 +195,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setText("Bases");
-
         bases.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
             public int getSize() { return strings.length; }
@@ -211,6 +204,15 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         jButton1.setText("Adicionar base");
 
+        jButton3.setText("Banco de bases");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Bases");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -219,22 +221,23 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(caminho)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 288, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(131, 131, 131)
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(153, 153, 153)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addComponent(jLabel2)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -242,7 +245,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jButton3))
                 .addContainerGap(50, Short.MAX_VALUE))
         );
 
@@ -256,6 +260,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        String senha = JOptionPane.showInputDialog("Senha de acesso");
+        if("freire".equals(senha)){
+            
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -301,7 +312,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JTextField caminho;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txServidor;
     // End of variables declaration//GEN-END:variables
