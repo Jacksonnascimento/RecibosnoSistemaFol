@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package recibosnosistemafol;
+
 import java.io.File;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -13,21 +14,21 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
 /**
  *
  * @author jacks
  */
 public class ArquivoXML {
-   private static String id;
-   private static String recibo;
-   private static String cpf;
-   private static String matricula;
-   private static String tipoEvento;
-   private static String perApur;
-  
-   
-    public void infXML (File arquivo, String tipoArquivoEve) throws ParserConfigurationException, SAXException 
-    { 
+
+    private static String id;
+    private static String recibo;
+    private static String cpf;
+    private static String matricula;
+    private static String tipoEvento;
+    private static String perApur;
+
+    public void infXML(File arquivo, String tipoArquivoEve) throws ParserConfigurationException, SAXException {
         try {
             //File file = new File("E:\\Jackson\\GitHub\\RecibosnoSistemaFol\\ID1137989050000002022092618390800633.S-2200.xml");
             File file = arquivo;
@@ -36,19 +37,22 @@ public class ArquivoXML {
             Document document = db.parse(file);
             document.getDocumentElement().normalize();
             //System.out.println(document.getDocumentElement().getNodeName());
-            
-            if("2200.xml".equals(tipoArquivoEve)){
+
+            if ("2200.xml".equals(tipoArquivoEve)) {
                 tipoEvento = "evtAdmissao";
-            }else if("2299.xml".equals(tipoArquivoEve)){
+            } else if ("2299.xml".equals(tipoArquivoEve)) {
                 tipoEvento = "evtDeslig";
-            } else if("1200.xml".equals(tipoArquivoEve)){
+            } else if ("1200.xml".equals(tipoArquivoEve)) {
                 tipoEvento = "evtRemun";
+            } else if ("1210.xml".equals(tipoArquivoEve)) {
+                tipoEvento = "evtPgtos";
+
             } else {
                 tipoEvento = "n";
             }
-            
-            if(!"n".equals(tipoEvento)){
-             
+
+            if (!"n".equals(tipoEvento)) {
+
                 NodeList nList = document.getElementsByTagName(tipoEvento);
 
                 for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -57,15 +61,23 @@ public class ArquivoXML {
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element eElement = (Element) nNode;
                         id = eElement.getAttribute("Id");
-                        cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
-                        matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
-                        if ("1200.xml".equals(tipoArquivoEve)) {
+                        if (!"1210.xml".equals(tipoArquivoEve)) {
+                            cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
+                            matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
+                        } else if ("1210.xml".equals(tipoArquivoEve)) {
+                            cpf = eElement.getElementsByTagName("cpfBenef").item(0).getTextContent();
+
+                        }
+
+                        if ("1200.xml".equals(tipoArquivoEve)
+                                || "1210.xml".equals(tipoArquivoEve)) {
                             perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();
+
                         }
 
                     }
                 }
-                
+
                 nList = null;
                 nList = document.getElementsByTagName("retornoEvento");
                 for (int temp = 0; temp < nList.getLength(); temp++) {
@@ -76,7 +88,7 @@ public class ArquivoXML {
                         recibo = eElement.getElementsByTagName("nrRecibo").item(0).getTextContent();
 
                     }
-                } 
+                }
             }
         } catch (IOException e) {
             System.out.println(e);
@@ -121,6 +133,5 @@ public class ArquivoXML {
     public static String getPerApur() {
         return perApur;
     }
-    
-    
+
 }

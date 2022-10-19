@@ -12,33 +12,31 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
 
-
 /**
  *
  * @author jacks
  */
 public class BancoDados {
+
     String connectionUrl;
     ResultSet resultSet = null;
-    
-    public BancoDados(String servidor, String database, String user, String senha){
-        
-        
+
+    public BancoDados(String servidor, String database, String user, String senha) {
+
         connectionUrl
-                
-                = String.format("jdbc:sqlserver://%s:1433;" 
-                + "database=%s;"
-                + "user=%s;"
-                + "password=%s;"
-                + "encrypt=false;"
-                + "trustServerCertificate=false;"
-                + "loginTimeout=30;", servidor, database, user, senha);
-        
+                = String.format("jdbc:sqlserver://%s:1433;"
+                        + "database=%s;"
+                        + "user=%s;"
+                        + "password=%s;"
+                        + "encrypt=false;"
+                        + "trustServerCertificate=false;"
+                        + "loginTimeout=30;", servidor, database, user, senha);
+
         System.out.println(connectionUrl);
     }
-    
-    public BancoDados(){
-         connectionUrl
+
+    public BancoDados() {
+        connectionUrl
                 = "jdbc:sqlserver://191.233.29.0:1433;" //servidor Azure
                 + "database=bancoDados;"
                 + "user=sa;"
@@ -47,46 +45,42 @@ public class BancoDados {
                 + "trustServerCertificate=false;"
                 + "loginTimeout=30;";
 
-        
     }
-    
-    
-     public String select(String query, int quantColunas){
+
+    public String select(String query, int quantColunas) {
         String resultado = "";
-         try ( Connection connection = DriverManager.getConnection(connectionUrl);  Statement statement = connection.createStatement();) {
+        try ( Connection connection = DriverManager.getConnection(connectionUrl);  Statement statement = connection.createStatement();) {
 
-                String selectSql = query;
-                resultSet = statement.executeQuery(selectSql);
+            String selectSql = query;
+            resultSet = statement.executeQuery(selectSql);
 
-                while (resultSet.next()) {
-                    for (int i = 1; i <= quantColunas; i++) {
-                        resultado += resultSet.getString(i) + ",";
-
-                    }
-
-                    resultado += "\n";
+            while (resultSet.next()) {
+                for (int i = 1; i <= quantColunas; i++) {
+                    resultado += resultSet.getString(i) + ",";
 
                 }
-                System.out.println(selectSql);
-                connection.close();
-                
-                return resultado;
-            } catch (SQLException e) {
+
+                resultado += "\n";
+
             }
-         
-         return null;
-    }
-                
-        
-    
-    public void update(String query){
-            try ( Connection connection = DriverManager.getConnection(connectionUrl);  PreparedStatement prepsInsertProduct = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
-                prepsInsertProduct.execute();
-               System.out.println(query);
-                connection.close();  
-                JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
-            } catch (SQLException e) {             
-            }
+            System.out.println(selectSql);
+            connection.close();
+
+            return resultado;
+        } catch (SQLException e) {
         }
-    
+
+        return null;
+    }
+
+    public void update(String query) {
+        try ( Connection connection = DriverManager.getConnection(connectionUrl);  PreparedStatement prepsInsertProduct = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);) {
+            prepsInsertProduct.execute();
+            System.out.println(query);
+            connection.close();
+            JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
+        } catch (SQLException e) {
+        }
+    }
+
 }
