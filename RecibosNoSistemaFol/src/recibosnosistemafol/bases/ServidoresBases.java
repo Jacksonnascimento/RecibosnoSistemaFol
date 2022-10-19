@@ -35,6 +35,9 @@ public class ServidoresBases {
                 + "('%s', '%s', "
                 + "'%s', '%s', "
                 + "'%s')", id, descri, servidor, database, user, senha);
+        BancoDados banco = new BancoDados("191.233.29.0", "RECIBOS_BASES", "sa", "@jn87519023");
+        banco.update(insert);
+        
     }
     
     public void addBases(int id, String descri, String servidor, String database, String user, String senha) {
