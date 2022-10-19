@@ -31,13 +31,14 @@ import recibosnosistemafol.bases.ServidoresBases;
  */
 public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
-    DefaultListModel model = new DefaultListModel();
-    String servidor;
-    String database;
-    String user;
-    String senha;
-    String caminhoDist;
-    ServidoresBases basesbanco;
+    private DefaultListModel model = new DefaultListModel();
+    private  String servidor;
+    private String database;
+    private String user;
+    private String senha;
+    private String caminhoDist;
+    private ServidoresBases basesbanco;
+    private String senhaacesso = null;
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
@@ -45,12 +46,12 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     public TelaAdicionarVariosRecibos() throws URISyntaxException {
         initComponents();
         addBase();
-        caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos"); //apenas na minha máquina
+      //  caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos"); //apenas na minha máquina
 
-        /* caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+         caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
 			caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1); 
                         
-        caminho.setText(caminhoDist + "\\ArquivosXML");         */
+        caminho.setText(caminhoDist + "\\ArquivosXML");         
     }
 
     public void addBase() {
@@ -152,23 +153,21 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
 
         JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
-        if (!"".equals(arquivosNaoAdd)) {
-            JOptionPane.showMessageDialog(null, "Arquivos que não foram enviados: " + arquivosNaoAdd);
-        }
+        
 
         if ("txt".equals(servidor)) {
             Date date = new Date();
 
-            String caminhoarquivoResultado
-                    = String.format("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado%s.sql",
-                            date.getTime() + date.getDay() + date.getYear()); //apenas na minha máquina
+            /*String caminhoarquivoResultado
+                    = String.format("E:\\Jackson\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado%s.sql",
+                            date.getTime() + date.getDay() + date.getYear()); //apenas na minha máquina */
 
-            /* String caminhoarquivoResultado
+             String caminhoarquivoResultado
                     = String.format(caminhoDist + "\\ArquivoRe\\resultado%s.sql",
-                            date.getTime() + date.getDay() + date.getYear()); */
+                            date.getTime() + date.getDay() + date.getYear()); 
             FileWriter arquivoResultado = new FileWriter(caminhoarquivoResultado);
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
-
+           
             gravarInfoAr.printf(arquivoUpdate);
 
             arquivoResultado.close();
@@ -211,6 +210,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jScrollPane1.setViewportView(bases);
 
         jButton1.setText("Adicionar base");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton3.setText("Banco de bases");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -270,14 +274,30 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        String senha = JOptionPane.showInputDialog("Senha de acesso");
-        if ("freire".equals(senha)) {
+       if(senhaacesso == null || !"freire".equals(senhaacesso)){
+           senhaacesso = JOptionPane.showInputDialog("Senha de acesso");
+       }
+        if ("freire".equals(senhaacesso)) {
             zerarLis();
             basesDoBanco();
         } else {
             JOptionPane.showMessageDialog(null, "Senha incorreta");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(senhaacesso == null || !"freire".equals(senhaacesso)){
+           senhaacesso = JOptionPane.showInputDialog("Senha de acesso");
+       }
+        if ("freire".equals(senhaacesso)) {
+            AddBaseBanco add = new AddBaseBanco();
+            add.setVisible(rootPaneCheckingEnabled);
+        } else {
+            JOptionPane.showMessageDialog(null, "Senha incorreta");
+        }
+        
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

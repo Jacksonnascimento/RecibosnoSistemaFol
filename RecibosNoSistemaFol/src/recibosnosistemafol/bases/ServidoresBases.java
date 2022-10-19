@@ -30,11 +30,11 @@ public class ServidoresBases {
         this.senha = senha;
     }
 
-    public void addbasenoBanco(int id, String descri, String servidor, String database, String user, String senha) {
+    public void addbasenoBanco(String descri, String servidor, String database, String user, String senha) {
         String insert = String.format("INSERT INTO BASES VALUES"
                 + "('%s', '%s', "
                 + "'%s', '%s', "
-                + "'%s')", id, descri, servidor, database, user, senha);
+                + "'%s')", descri, servidor, database, user, senha);
         BancoDados banco = new BancoDados("191.233.29.0", "RECIBOS_BASES", "sa", "@jn87519023");
         banco.update(insert);
         
