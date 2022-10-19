@@ -23,6 +23,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import recibosnosistemafol.ArquivoXML;
 import recibosnosistemafol.arquivosDoEsocial.ArquivosESocial;
+import recibosnosistemafol.bases.ServidoresBases;
 
 /**
  *
@@ -36,46 +37,55 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     String user;
     String senha;
     String caminhoDist;
+    ServidoresBases basesbanco;
+
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
     public TelaAdicionarVariosRecibos() throws URISyntaxException {
         initComponents();
-        addbases();
-        txServidor.setText("localhost");
+        addBase();
         caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos"); //apenas na minha máquina
-        
-        
-        
-       /* caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+
+        /* caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
 			caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1); 
                         
-        caminho.setText(caminhoDist + "\\ArquivosXML");         */      
+        caminho.setText(caminhoDist + "\\ArquivosXML");         */
     }
-    
-    public void model(){
+
+    public void addBase() {
         model = new DefaultListModel();
         model.addElement("Salvar arquivo.txt");
-    }
-   
-
-    public void addbases() throws URISyntaxException {
-        
-        
-                        
-        
-        model.addElement("Salvar arquivo.txt");
-        model.addElement("PM Itapetinga - PC Jack");
-        model.addElement("PM Cocos - PC Jack");
-
         bases.setModel(model);
+
+    }
+    
+    public void zerarLis(){
+        model = null;
+        addBase();
     }
 
     public void selecionarBase() {
-
-       if ("Salvar arquivo.txt".equals(bases.getSelectedValue())) {
+        if ("Salvar arquivo.txt".equals(bases.getSelectedValue())) {
             servidor = "txt";
+        } else {
+            ServidoresBases bas = basesbanco.getBaseDesc(bases.getSelectedValue());
+            servidor = bas.getServidor();
+            database = bas.getDatabase();
+            user = bas.getUser();
+            senha = bas.getSenha();
+
         }
+    }
+
+    public void basesDoBanco() {
+        basesbanco = new ServidoresBases();
+        basesbanco.buscarBasesbanco();
+        for (ServidoresBases base : basesbanco.getBasesBanco()) {
+            model.addElement(base.getDescri());
+        }
+
+        bases.setModel(model);
     }
 
     public void addRecibosBanco() throws IOException {
@@ -149,15 +159,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         if ("txt".equals(servidor)) {
             Date date = new Date();
 
-            
             String caminhoarquivoResultado
                     = String.format("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado%s.sql",
                             date.getTime() + date.getDay() + date.getYear()); //apenas na minha máquina
-           
-          /* String caminhoarquivoResultado
-                    = String.format(caminhoDist + "\\ArquivoRe\\resultado%s.sql",
-                            date.getTime() + date.getDay() + date.getYear()); */ 
 
+            /* String caminhoarquivoResultado
+                    = String.format(caminhoDist + "\\ArquivoRe\\resultado%s.sql",
+                            date.getTime() + date.getDay() + date.getYear()); */
             FileWriter arquivoResultado = new FileWriter(caminhoarquivoResultado);
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
 
@@ -263,8 +271,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         String senha = JOptionPane.showInputDialog("Senha de acesso");
-        if("freire".equals(senha)){
-            
+        if ("freire".equals(senha)) {
+            zerarLis();
+            basesDoBanco();
+        } else {
+            JOptionPane.showMessageDialog(null, "Senha incorreta");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

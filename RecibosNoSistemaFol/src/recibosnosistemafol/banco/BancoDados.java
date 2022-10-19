@@ -35,17 +35,6 @@ public class BancoDados {
         System.out.println(connectionUrl);
     }
 
-    public BancoDados() {
-        connectionUrl
-                = "jdbc:sqlserver://191.233.29.0:1433;" //servidor Azure
-                + "database=RECIBOS_BASES;"
-                + "user=sa;"
-                + "password=@jn87519023;"
-                + "encrypt=false;"
-                + "trustServerCertificate=false;"
-                + "loginTimeout=30;";
-
-    }
 
     public String select(String query, int quantColunas) {
         String resultado = "";
