@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -34,19 +35,30 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     String database;
     String user;
     String senha;
-
+    String caminhoDist;
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
-    public TelaAdicionarVariosRecibos() {
+    public TelaAdicionarVariosRecibos() throws URISyntaxException {
         initComponents();
         addbases();
         txServidor.setText("localhost");
-        caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos");
-        //  caminho.setText("C:\\JSN\\Recibos\\Arquivos xml");  //após instalado
+        caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos"); //apenas na minha máquina
+        
+        
+        
+       /* caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+			caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1); 
+                        
+        caminho.setText(caminhoDist + "\\ArquivosXML");         */      
     }
+    
+   
 
-    public void addbases() {
+    public void addbases() throws URISyntaxException {
+        
+        
+                        
         model = new DefaultListModel();
         model.addElement("Salvar arquivo.txt");
         model.addElement("PM Itapetinga - PC Jack");
@@ -143,12 +155,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         if ("txt".equals(servidor)) {
             Date date = new Date();
 
-            /*String caminhoarquivoResultado = 
-                    String.format("C:\\JSN\\Recibos\\Arquivos sql\\resultado%s.sql", //após instalado
-                    date.getTime() + date.getDay() + date.getYear()); */
+            
             String caminhoarquivoResultado
                     = String.format("D:\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado%s.sql",
-                            date.getTime() + date.getDay() + date.getYear());
+                            date.getTime() + date.getDay() + date.getYear()); //apenas na minha máquina
+           
+          /* String caminhoarquivoResultado
+                    = String.format(caminhoDist + "\\ArquivoRe\\resultado%s.sql",
+                            date.getTime() + date.getDay() + date.getYear()); */ 
 
             FileWriter arquivoResultado = new FileWriter(caminhoarquivoResultado);
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
@@ -273,7 +287,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaAdicionarVariosRecibos().setVisible(true);
+                try {
+                    new TelaAdicionarVariosRecibos().setVisible(true);
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
