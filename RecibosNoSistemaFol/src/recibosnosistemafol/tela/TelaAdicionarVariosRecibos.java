@@ -115,12 +115,12 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                         || "evtRemun".equals(arquivoXML.getTipoEvento())
                         || "evtPgtos".equals(arquivoXML.getTipoEvento())) {
 
-                    i = JOptionPane.showConfirmDialog(
+                /*    i = JOptionPane.showConfirmDialog(
                             null,
                             String.format("Deseja adicionar o arquivo de ID: %s?", arquivoXML.getId()),
                             "Continua",
                             JOptionPane.OK_CANCEL_OPTION
-                    );
+                    ); */ 
 
                     if (i == 0) {
                         cont++;

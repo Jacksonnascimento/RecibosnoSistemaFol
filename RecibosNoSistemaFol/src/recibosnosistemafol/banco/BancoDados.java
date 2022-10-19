@@ -67,7 +67,7 @@ public class BancoDados {
             prepsInsertProduct.execute();
             System.out.println(query);
             connection.close();
-            JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
+          //  JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
         } catch (SQLException e) {
         }
     }
