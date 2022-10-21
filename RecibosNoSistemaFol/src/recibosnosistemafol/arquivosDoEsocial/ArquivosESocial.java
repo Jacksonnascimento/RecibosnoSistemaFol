@@ -18,10 +18,10 @@ public class ArquivosESocial {
 
         String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
                 + "SET ECO_RECIBO = '%s'\n"
-                + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2200 S2 \n"
-                + "ON S2.CHAVE = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-2200'\n"
+                + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN GER_FUNCIONARIO GF \n"
+                + "ON GF.FUN_MATRICULA = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-2200'\n"
                 + "\n"
-                + "WHERE S2.matricula = %s", recibo, matricula);
+                + "WHERE GF.FUN_MATRICULA = %s", recibo, matricula);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
