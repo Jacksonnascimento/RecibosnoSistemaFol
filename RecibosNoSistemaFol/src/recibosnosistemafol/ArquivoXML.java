@@ -27,6 +27,7 @@ public class ArquivoXML {
     private static String matricula;
     private static String tipoEvento;
     private static String perApur;
+    private static String nrRecEvt;
 
     public void infXML(File arquivo, String tipoArquivoEve) throws ParserConfigurationException, SAXException {
         try {
@@ -46,7 +47,8 @@ public class ArquivoXML {
                 tipoEvento = "evtRemun";
             } else if ("1210.xml".equals(tipoArquivoEve)) {
                 tipoEvento = "evtPgtos";
-
+            } else if ("3000.xml".equals(tipoArquivoEve)) {
+                tipoEvento = "evtExclusao";
             } else {
                 tipoEvento = "n";
             }
@@ -61,7 +63,7 @@ public class ArquivoXML {
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element eElement = (Element) nNode;
                         id = eElement.getAttribute("Id");
-                        if (!"1210.xml".equals(tipoArquivoEve)) {
+                        if (!"1210.xml".equals(tipoArquivoEve) && !"3000.xml".equals(tipoArquivoEve)) {
                             cpf = eElement.getElementsByTagName("cpfTrab").item(0).getTextContent();
                             matricula = eElement.getElementsByTagName("matricula").item(0).getTextContent();
                         } else if ("1210.xml".equals(tipoArquivoEve)) {
@@ -73,6 +75,8 @@ public class ArquivoXML {
                                 || "1210.xml".equals(tipoArquivoEve)) {
                             perApur = eElement.getElementsByTagName("perApur").item(0).getTextContent();
 
+                        } else if ("3000.xml".equals(tipoArquivoEve)) {
+                            nrRecEvt = eElement.getElementsByTagName("nrRecEvt").item(0).getTextContent();
                         }
 
                     }
@@ -132,6 +136,13 @@ public class ArquivoXML {
 
     public static String getPerApur() {
         return perApur;
+    }
+
+    /**
+     * @return the nrRecEvt
+     */
+    public static String getNrRecEvt() {
+        return nrRecEvt;
     }
 
 }

@@ -87,4 +87,20 @@ public class ArquivosESocial {
         return update;
 
     }
+    
+    public String s3000(String recibo, String servidor, String database, String user, String senha) {
+
+        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO\n"
+                + "SET ECO_RECIBO = NULL, ECO_SITUACAO = 'I'\n"
+                + "WHERE ECO_RECIBO = '%s'",
+                recibo);
+
+        if (!"txt".equals(servidor)) {
+            banco = new BancoDados(servidor, database, user, senha);
+            banco.update(update);
+        }
+
+        return update;
+
+    }
 }

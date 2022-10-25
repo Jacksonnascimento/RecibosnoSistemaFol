@@ -113,7 +113,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 if ("evtAdmissao".equals(arquivoXML.getTipoEvento())
                         || "evtDeslig".equals(arquivoXML.getTipoEvento())
                         || "evtRemun".equals(arquivoXML.getTipoEvento())
-                        || "evtPgtos".equals(arquivoXML.getTipoEvento())) {
+                        || "evtPgtos".equals(arquivoXML.getTipoEvento())
+                        || "evtExclusao".equals(arquivoXML.getTipoEvento())) {
 
                 /*    i = JOptionPane.showConfirmDialog(
                             null,
@@ -136,6 +137,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                         } else if ("evtPgtos".equals(arquivoXML.getTipoEvento())) {
                             arquivoUpdate
                                     += esocial.s1210(arquivoXML.getCpf(), arquivoXML.getRecibo(), arquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
+                        } else if ("evtExclusao".equals(arquivoXML.getTipoEvento())) {
+                            arquivoUpdate
+                                    += esocial.s3000(arquivoXML.getNrRecEvt(), servidor, database, user, senha) + "\n\n";
                         }
 
                     }
