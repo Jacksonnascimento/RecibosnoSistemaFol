@@ -13,15 +13,11 @@ import recibosnosistemafol.banco.BancoDados;
 public class ArquivosESocial {
 
     BancoDados banco;
+    QueryArquivos query;
 
     public String s2200(String matricula, String recibo, String servidor, String database, String user, String senha) {
-
-        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
-                + "SET ECO_RECIBO = '%s'\n"
-                + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN GER_FUNCIONARIO GF \n"
-                + "ON GF.FUN_MATRICULA = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-2200'\n"
-                + "\n"
-                + "WHERE GF.FUN_MATRICULA = %s", recibo, matricula);
+        query = new QueryArquivos();
+        String update = query.s2200(matricula, recibo);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
