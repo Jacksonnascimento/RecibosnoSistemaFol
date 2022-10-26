@@ -28,13 +28,8 @@ public class ArquivosESocial {
     }
 
     public String s2299(String matricula, String recibo, String servidor, String database, String user, String senha) {
-
-        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
-                + "SET ECO_RECIBO = '%s'\n"
-                + "FROM ESOCIAL_CONTROLA_ENVIO ECE INNER JOIN FPG_REGISTROS_ESOCIAL_S_2299 S2 \n"
-                + "ON S2.CHAVE = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-2299'\n"
-                + "\n"
-                + "WHERE S2.matricula = %s", recibo, matricula);
+        query = new QueryArquivos();       
+        String update = query.s2299(matricula, recibo);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
@@ -46,14 +41,8 @@ public class ArquivosESocial {
     }
 
     public String s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
-
-        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
-                + "SET ECO_RECIBO = '%s', ECO_SITUACAO = 'N'\n"
-                + "FROM FPG_REGISTROS_ESOCIAL_S_1200 FE\n"
-                + "INNER JOIN ESOCIAL_CONTROLA_ENVIO ECE\n"
-                + "ON FE.PES_COD = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-1200'\n"
-                + "AND ECE.ECO_ANO = FE.COM_ANO AND  ECE.ECO_MES = FE.MES_COD\n"
-                + "WHERE FE.cpfTrab = '%s' AND FE.perApur = '%s'", recibo, cpf, perApur);
+        query = new QueryArquivos();
+        String update = query.s1200(cpf, recibo, perApur);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
@@ -65,15 +54,8 @@ public class ArquivosESocial {
     }
 
     public String s1210(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
-       
-        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO \n"
-                + "SET ECO_RECIBO = '%s', ECO_SITUACAO = 'N'\n"
-                + "FROM FPG_REGISTROS_ESOCIAL_S_1210 FE\n"
-                + "INNER JOIN ESOCIAL_CONTROLA_ENVIO ECE\n"
-                + "ON FE.PES_COD = ECE.ECO_CHAVE AND ECE.ETA_COD = 'S-1210'\n"
-                + "AND ECE.ECO_ANO = FE.COM_ANO AND  ECE.ECO_MES = FE.MES_COD\n"
-                + "WHERE FE.cpfBenef = '%s' AND FE.perApur = '%s'\n", 
-                recibo, cpf, perApur);
+       query = new QueryArquivos();
+        String update = query.s1210(cpf, recibo, perApur);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
@@ -85,11 +67,8 @@ public class ArquivosESocial {
     }
     
     public String s3000(String recibo, String servidor, String database, String user, String senha) {
-
-        String update = String.format("UPDATE ESOCIAL_CONTROLA_ENVIO\n"
-                + "SET ECO_RECIBO = NULL, ECO_SITUACAO = 'I'\n"
-                + "WHERE ECO_RECIBO = '%s'",
-                recibo);
+        query = new QueryArquivos();
+        String update = query.s3000(recibo);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
