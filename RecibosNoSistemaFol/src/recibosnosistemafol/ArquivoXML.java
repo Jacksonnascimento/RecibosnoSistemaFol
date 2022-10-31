@@ -38,21 +38,28 @@ public class ArquivoXML {
             Document document = db.parse(file);
             document.getDocumentElement().normalize();
             //System.out.println(document.getDocumentElement().getNodeName());
-
-            if ("2200.xml".equals(tipoArquivoEve)) {
-                tipoEvento = "evtAdmissao";
-            } else if ("2299.xml".equals(tipoArquivoEve)) {
-                tipoEvento = "evtDeslig";
-            } else if ("1200.xml".equals(tipoArquivoEve)) {
-                tipoEvento = "evtRemun";
-            } else if ("1210.xml".equals(tipoArquivoEve)) {
-                tipoEvento = "evtPgtos";
-            } else if ("3000.xml".equals(tipoArquivoEve)) {
-                tipoEvento = "evtExclusao";
-            } else {
+            
+            switch(tipoArquivoEve){
+                case "2200.xml":
+                    tipoEvento = "evtAdmissao";
+                    break;
+                case "2299.xml":
+                    tipoEvento = "evtDeslig";
+                    break;
+                case "1200.xml":
+                    tipoEvento = "evtRemun";
+                    break;
+                case "1210.xml":
+                    tipoEvento = "evtPgtos";
+                    break;
+                case "3000.xml":
+                    tipoEvento = "evtExclusao";
+                    break;
+                default:
                 tipoEvento = "n";
+                break;
+               
             }
-
             if (!"n".equals(tipoEvento)) {
 
                 NodeList nList = document.getElementsByTagName(tipoEvento);
