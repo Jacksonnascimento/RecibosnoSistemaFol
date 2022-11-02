@@ -93,13 +93,14 @@ public class ServidoresBases {
         
         String [] linhas =  textoArquivo.split("fim");
         
-        if(linhas != null){
-            for(String linha : linhas){
-            String [] colunas = linha.split(",");
+        
+        for (String linha : linhas) 
+        {
+            String[] colunas = linha.split(",");
             addBases(colunas[0], colunas[1], colunas[2], colunas[3], colunas[4]);
-            
-            }
+
         }
+
         
 
     }
