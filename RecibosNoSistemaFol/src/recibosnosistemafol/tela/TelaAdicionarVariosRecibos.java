@@ -79,8 +79,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
     }
 
-    public void basesDoBanco() {
+    public void basesDoBanco() throws IOException, URISyntaxException {
         basesbanco = new ServidoresBases();
+        basesbanco.caminhoDosArquivos();
         basesbanco.buscarBasesbanco();
         for (ServidoresBases base : basesbanco.getBasesBanco()) {
             model.addElement(base.getDescri());
@@ -283,8 +284,17 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
        }
         if ("freire".equals(senhaacesso)) {
             zerarLis();
-            basesDoBanco();
-        } else {
+         
+           try {
+               basesDoBanco();
+           } catch (IOException ex) {
+               Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+           } catch (URISyntaxException ex) {
+               Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+           }
+           
+           }
+         else {
             JOptionPane.showMessageDialog(null, "Senha incorreta");
         }
     }//GEN-LAST:event_jButton3ActionPerformed

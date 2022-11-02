@@ -4,6 +4,10 @@
  */
 package recibosnosistemafol.tela;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import recibosnosistemafol.bases.ServidoresBases;
 
 /**
@@ -19,8 +23,9 @@ public class AddBaseBanco extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void salvar(){
+    public void salvar() throws IOException, URISyntaxException{
         ServidoresBases bases = new ServidoresBases();
+        bases.caminhoDosArquivos();
         bases.addbasenoBanco(desc.getText(), servidor.getText(), database.getText(), usr.getText(), senha.getText());
         setVisible(false);
     }
@@ -147,7 +152,13 @@ public class AddBaseBanco extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        salvar();
+        try {
+            salvar();
+        } catch (IOException ex) {
+            Logger.getLogger(AddBaseBanco.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(AddBaseBanco.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
