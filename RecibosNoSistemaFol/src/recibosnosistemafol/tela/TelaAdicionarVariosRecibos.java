@@ -43,7 +43,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
-    public TelaAdicionarVariosRecibos() throws URISyntaxException {
+    public TelaAdicionarVariosRecibos() throws URISyntaxException  {
         initComponents();
         addBase();
       //  caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos"); //apenas na minha máquina
@@ -51,13 +51,16 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
          caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
 			caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1); 
                         
-        caminho.setText(caminhoDist + "\\ArquivosXML");         
+        caminho.setText(caminhoDist + "\\ArquivosXML");       
+         
     }
     
      public void salvar() throws IOException, URISyntaxException{
         ServidoresBases bases = new ServidoresBases();
         bases.caminhoDosArquivos();
         bases.addbasenoBanco(descText.getText(), servidorText.getText(), databaseText.getText(), usrText.getText(), senhaText.getText());
+        zerarLis();
+        basesDoBanco();
         
     }
 
@@ -398,27 +401,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        if(senhaacesso == null || !"freire".equals(senhaacesso)){
-            senhaacesso = JOptionPane.showInputDialog("Senha de acesso");
-        }
-        if ("freire".equals(senhaacesso)) {
-            zerarLis();
-
-            try {
-                basesDoBanco();
-            } catch (IOException ex) {
-                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-        }
-        else {
-            JOptionPane.showMessageDialog(null, "Senha incorreta");
-        }
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             salvar();
@@ -428,6 +410,19 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        zerarLis();
+        try {
+            basesDoBanco();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+          
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
