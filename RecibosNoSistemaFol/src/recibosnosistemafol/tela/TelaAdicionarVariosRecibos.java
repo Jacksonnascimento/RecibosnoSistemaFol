@@ -130,22 +130,23 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                             "Continua",
                             JOptionPane.OK_CANCEL_OPTION
                     ); */ 
-
+                    
+                String tipoEvento = arquivoXML.getTipoEvento();
                     if (i == 0) {
                         cont++;
-                        if ("evtAdmissao".equals(arquivoXML.getTipoEvento())) {
+                        if ("evtAdmissao".equals(tipoEvento)) {
                             arquivoUpdate
                                     += esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n";
-                        } else if ("evtDeslig".equals(arquivoXML.getTipoEvento())) {
+                        } else if ("evtDeslig".equals(tipoEvento)) {
                             arquivoUpdate
                                     += esocial.s2299(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n";
-                        } else if ("evtRemun".equals(arquivoXML.getTipoEvento())) {
+                        } else if ("evtRemun".equals(tipoEvento)) {
                             arquivoUpdate
                                     += esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(), arquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
-                        } else if ("evtPgtos".equals(arquivoXML.getTipoEvento())) {
+                        } else if ("evtPgtos".equals(tipoEvento)) {
                             arquivoUpdate
                                     += esocial.s1210(arquivoXML.getCpf(), arquivoXML.getRecibo(), arquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
-                        } else if ("evtExclusao".equals(arquivoXML.getTipoEvento())) {
+                        } else if ("evtExclusao".equals(tipoEvento)) {
                             arquivoUpdate
                                     += esocial.s3000(arquivoXML.getNrRecEvt(), servidor, database, user, senha) + "\n\n";
                         }
@@ -215,6 +216,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         usrText = new javax.swing.JTextField();
         senhaText = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -326,7 +328,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(133, 133, 133)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(104, Short.MAX_VALUE))
+                .addContainerGap(105, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,7 +355,20 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addContainerGap(72, Short.MAX_VALUE))
         );
 
-        jTabbedPane2.addTab("tab2", jPanel1);
+        jTabbedPane2.addTab("Adicionar bases", jPanel1);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 429, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 289, Short.MAX_VALUE)
+        );
+
+        jTabbedPane2.addTab("Configurações", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -466,6 +481,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
