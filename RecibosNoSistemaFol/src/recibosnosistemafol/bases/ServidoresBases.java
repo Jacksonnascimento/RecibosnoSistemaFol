@@ -13,7 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
+
 
 
 /**
@@ -100,9 +100,7 @@ public class ServidoresBases {
 
             }
 
-        } else {
-            JOptionPane.showMessageDialog(null, "Não há bases cadastradas!");
-        }
+        } 
         
         
 

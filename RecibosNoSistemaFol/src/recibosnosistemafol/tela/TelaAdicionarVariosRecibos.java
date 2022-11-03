@@ -42,9 +42,10 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
-    public TelaAdicionarVariosRecibos() throws URISyntaxException {
+    public TelaAdicionarVariosRecibos() throws URISyntaxException, IOException {
         initComponents();
         addBase();
+        basesDoBanco();
 
         caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
@@ -449,6 +450,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 try {
                     new TelaAdicionarVariosRecibos().setVisible(true);
                 } catch (URISyntaxException ex) {
+                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IOException ex) {
                     Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
