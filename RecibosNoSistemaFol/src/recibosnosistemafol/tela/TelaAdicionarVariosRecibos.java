@@ -32,36 +32,34 @@ import recibosnosistemafol.bases.ServidoresBases;
 public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     private DefaultListModel model = new DefaultListModel();
-    private  String servidor;
+    private String servidor;
     private String database;
     private String user;
     private String senha;
     private String caminhoDist;
     private ServidoresBases basesbanco;
-    
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
-    public TelaAdicionarVariosRecibos() throws URISyntaxException  {
+    public TelaAdicionarVariosRecibos() throws URISyntaxException {
         initComponents();
         addBase();
-      //  caminho.setText("D:\\GitHub\\RecibosnoSistemaFol\\Recibos"); //apenas na minha máquina
 
-         caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-			caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1); 
-                        
-        caminho.setText(caminhoDist + "\\ArquivosXML");       
-         
+        caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
+
+        caminho.setText(caminhoDist + "\\ArquivosXML");
+
     }
-    
-     public void salvar() throws IOException, URISyntaxException{
+
+    public void salvar() throws IOException, URISyntaxException {
         ServidoresBases bases = new ServidoresBases();
         bases.caminhoDosArquivos();
         bases.addbasenoBanco(descText.getText(), servidorText.getText(), databaseText.getText(), usrText.getText(), senhaText.getText());
         zerarLis();
         basesDoBanco();
-        
+
     }
 
     public void addBase() {
@@ -70,8 +68,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         bases.setModel(model);
 
     }
-    
-    public void zerarLis(){
+
+    public void zerarLis() {
         model = null;
         addBase();
     }
@@ -127,14 +125,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                         || "evtPgtos".equals(arquivoXML.getTipoEvento())
                         || "evtExclusao".equals(arquivoXML.getTipoEvento())) {
 
-                /*    i = JOptionPane.showConfirmDialog(
+                    /*    i = JOptionPane.showConfirmDialog(
                             null,
                             String.format("Deseja adicionar o arquivo de ID: %s?", arquivoXML.getId()),
                             "Continua",
                             JOptionPane.OK_CANCEL_OPTION
-                    ); */ 
-                    
-                String tipoEvento = arquivoXML.getTipoEvento();
+                    ); */
+                    String tipoEvento = arquivoXML.getTipoEvento();
                     if (i == 0) {
                         cont++;
                         if ("evtAdmissao".equals(tipoEvento)) {
@@ -169,21 +166,16 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
 
         JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
-        
 
         if ("txt".equals(servidor)) {
             Date date = new Date();
 
-            /*String caminhoarquivoResultado
-                    = String.format("E:\\Jackson\\GitHub\\RecibosnoSistemaFol\\Arquivo\\resultado%s.sql",
-                            date.getTime() + date.getDay() + date.getYear()); //apenas na minha máquina */
-
-             String caminhoarquivoResultado
+            String caminhoarquivoResultado
                     = String.format(caminhoDist + "\\ArquivoRe\\resultado%s.sql",
-                            date.getTime() + date.getDay() + date.getYear()); 
+                            date.getTime() + date.getDay() + date.getYear());
             FileWriter arquivoResultado = new FileWriter(caminhoarquivoResultado);
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
-           
+
             gravarInfoAr.printf(arquivoUpdate);
 
             arquivoResultado.close();
@@ -420,8 +412,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         } catch (URISyntaxException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-           
-          
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**

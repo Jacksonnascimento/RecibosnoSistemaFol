@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 
 /**
@@ -90,17 +91,19 @@ public class ServidoresBases {
         br.close();
         fr.close();
         
-        
-        String [] linhas =  textoArquivo.split("fim");
-        
-        
-        for (String linha : linhas) 
-        {
-            String[] colunas = linha.split(",");
-            addBases(colunas[0], colunas[1], colunas[2], colunas[3], colunas[4]);
+        if(textoArquivo != ""){
+            String[] linhas = textoArquivo.split("fim");
 
+            for (String linha : linhas) {
+                String[] colunas = linha.split(",");
+                addBases(colunas[0], colunas[1], colunas[2], colunas[3], colunas[4]);
+
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Não há bases cadastradas!");
         }
-
+        
         
 
     }
