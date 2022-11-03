@@ -38,7 +38,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private String senha;
     private String caminhoDist;
     private ServidoresBases basesbanco;
-    private String senhaacesso = null;
+    
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
