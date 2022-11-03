@@ -14,8 +14,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
-
-
 /**
  *
  * @author Jackson
@@ -30,68 +28,63 @@ public class ServidoresBases {
     private ArrayList<ServidoresBases> basesBanco = new ArrayList<>();
     private String caminhoDist;
     private File arquivo;
+
     public void addBase(String descri, String servidor, String database, String user, String senha) {
         this.descri = descri;
         this.servidor = servidor;
         this.database = database;
         this.user = user;
         this.senha = senha;
-        
-        
-    }
-    
-    public void caminhoDosArquivos() throws URISyntaxException, IOException{
-        
-        caminhoDist = ServidoresBases.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-	caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1); 
-        
-        
-        
-        arquivo = new File( caminhoDist + "\\bases.txt");
-        
-        boolean existe = arquivo.exists();
-        
-        if(!existe){
-            arquivo.createNewFile();
-        }
-            
-            
 
     }
-    
+
+    public void caminhoDosArquivos() throws URISyntaxException, IOException {
+
+        caminhoDist = ServidoresBases.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
+
+        arquivo = new File(caminhoDist + "\\bases.txt");
+
+        boolean existe = arquivo.exists();
+
+        if (!existe) {
+            arquivo.createNewFile();
+        }
+
+    }
 
     public void addbasenoBanco(String descri, String servidor, String database, String user, String senha) throws IOException {
         String insert = String.format("%s, %s, "
                 + "%s, %s, "
                 + "%sfim\n", descri, servidor, database, user, senha);
-        
-        FileWriter fw = new FileWriter( arquivo, true );
-        BufferedWriter bw = new BufferedWriter( fw );
+
+        FileWriter fw = new FileWriter(arquivo, true);
+        BufferedWriter bw = new BufferedWriter(fw);
         bw.write(insert);
         bw.newLine();
         bw.close();
         fw.close();
     }
-    
+
     public void addBases(String descri, String servidor, String database, String user, String senha) {
         ServidoresBases base = new ServidoresBases();
         base.addBase(descri, servidor, database, user, senha);
         getBasesBanco().add(base);
-        
+
     }
-    
+
     public void buscarBasesbanco() throws FileNotFoundException, IOException {
-        FileReader fr = new FileReader( arquivo );
-        BufferedReader br = new BufferedReader( fr );
-        String textoArquivo  ="";
-        while(br.ready()){
+        FileReader fr = new FileReader(arquivo);
+        BufferedReader br = new BufferedReader(fr);
+        String textoArquivo = "";
+        while (br.ready()) {
             textoArquivo += br.readLine();
         }
-        
+
         br.close();
         fr.close();
-        
-        if(textoArquivo != ""){
+
+        if (textoArquivo != "") {
             String[] linhas = textoArquivo.split("fim");
 
             for (String linha : linhas) {
@@ -100,23 +93,19 @@ public class ServidoresBases {
 
             }
 
-        } 
-        
-        
+        }
 
     }
-    
+
     public ServidoresBases getBaseDesc(String desc) {
         for (ServidoresBases base : basesBanco) {
             if (desc.equals(base.getDescri())) {
                 return base;
             }
         }
-        
+
         return null;
     }
-
-    
 
     /**
      * @return the descri
@@ -159,5 +148,5 @@ public class ServidoresBases {
     public ArrayList<ServidoresBases> getBasesBanco() {
         return basesBanco;
     }
-    
+
 }
