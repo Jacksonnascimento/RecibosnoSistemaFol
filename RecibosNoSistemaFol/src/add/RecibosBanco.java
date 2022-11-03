@@ -89,7 +89,7 @@ public class RecibosBanco {
        // selecionarBase();
 
         String arquivosNaoAdd = "";
-        String caminhoArquivo = caminho.getText();
+        String caminhoArquivo = "";//caminho.getText();
 
         int cont = 0;
         int i = 0;
