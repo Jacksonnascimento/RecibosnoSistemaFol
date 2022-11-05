@@ -76,6 +76,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         bases.addbasenoBanco(descText.getText(), servidorText.getText(), databaseText.getText(), usrText.getText(), senhaText.getText());
         zerarLis();
         basesDoBanco();
+        descText.setText(null);
+        servidorText.setText(null);
+        databaseText.setText(null);
+        usrText.setText(null);
+        senhaText.setText(null);
 
     }
 
