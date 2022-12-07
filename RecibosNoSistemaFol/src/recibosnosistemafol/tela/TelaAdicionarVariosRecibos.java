@@ -53,12 +53,12 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
         caminho.setText(caminhoDist + "\\ArquivosXML");
-        
-        
+
         String caminhoarquivoResultado
-                    = caminhoDist + "\\ArquivoRe"; /*
+                = caminhoDist + "\\ArquivoRe";
+        /*
         \\resultado%s.sql", date.getTime() + date.getDay() + date.getYear()); */
-            caminhoSQL.setText(caminhoarquivoResultado);
+        caminhoSQL.setText(caminhoarquivoResultado);
 
     }
 
@@ -150,7 +150,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
                     String tipoEvento = arquivoXML.getTipoEvento();
 
-                    
                     if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
                         cont++;
                         if (!insert) {
@@ -175,18 +174,17 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                                             arquivoXML.getPerApur(), servidor, database, user, senha)
                                     + "\n\n";
                         } else {
-                            String [] anoMes = arquivoXML.getPerApur().split("-");
+                            String[] anoMes = arquivoXML.getPerApur().split("-");
                             int mes = Integer.parseInt(anoMes[1]);
                             int ano = Integer.parseInt(anoMes[0]);
                             int codOrg = Integer.parseInt(this.codOrg.getText());
                             String perApuracao = String.format("%s%s01 ", ano, mes);
-                                    
-                                    
-                            arquivoUpdate 
+
+                            arquivoUpdate
                                     += esocial.insertS1200(mes, ano, arquivoXML.getRecibo(),
                                             codOrg, arquivoXML.getCpf(),
                                             perApuracao, servidor, database, user, senha)
-                                            + "\n\n";
+                                    + "\n\n";
                         }
 
                     } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
@@ -222,15 +220,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
 
-        if ("txt".equals(servidor) && cont > 0)
-        {
+        if ("txt".equals(servidor) && cont > 0) {
             Date date = new Date();
             //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
-            FileWriter arquivoResultado = new FileWriter(String.format("%s//resultado%s.sql", 
-                                        caminhoSQL.getText(), 
-                                        date.getTime() 
-                                        + date.getDay() 
-                                        + date.getYear()));
+            FileWriter arquivoResultado = new FileWriter(String.format("%s//resultado%s.sql",
+                    caminhoSQL.getText(),
+                    date.getTime()
+                    + date.getDay()
+                    + date.getYear()));
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
 
             gravarInfoAr.printf(arquivoUpdate);
