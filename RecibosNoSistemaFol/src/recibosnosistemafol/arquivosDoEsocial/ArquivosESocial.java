@@ -78,4 +78,18 @@ public class ArquivosESocial {
         return update;
 
     }
+    
+    public String insertS1200(int ecoMes, int ecoAno, String ecoRecibo, int orgCod, String cpf, String perApure,
+                              String servidor, String database, String user, String senha)
+    {
+        query = new QueryArquivos();
+        String insert = query.insertS1200(ecoMes, ecoAno, ecoRecibo, orgCod, cpf, perApure);
+        
+        if (!"txt".equals(servidor)) {
+            banco = new BancoDados(servidor, database, user, senha);
+            banco.update(insert);
+        }
+        
+        return insert;
+    }
 }
