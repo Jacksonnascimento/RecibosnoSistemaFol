@@ -42,7 +42,7 @@ public class ArquivosESocial {
 
     public String s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
         query = new QueryArquivos();
-        String update = query.s1200(cpf, recibo, perApur);
+        String update = query.eventosTerceiraFase("S-1200", cpf, recibo, perApur);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
@@ -55,7 +55,7 @@ public class ArquivosESocial {
 
     public String s1210(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
        query = new QueryArquivos();
-        String update = query.s1210(cpf, recibo, perApur);
+        String update = query.eventosTerceiraFase("S-1210",cpf, recibo, perApur);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
