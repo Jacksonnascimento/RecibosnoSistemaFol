@@ -25,9 +25,9 @@ public class ArquivosESocial {
     
    
 
-    public String s2200(String matricula, String recibo, String servidor, String database, String user, String senha) {
-        query = new QueryArquivos();
-        String update = query.s2200(matricula, recibo);
+    public String s2200(String matricula, String recibo, String servidor, String database, String user, String senha) throws IOException {
+       // query = new QueryArquivos();
+        String update = String.format(fonte.getEventoS2200(), recibo, matricula);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
