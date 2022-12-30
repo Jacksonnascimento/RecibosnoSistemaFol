@@ -53,7 +53,7 @@ public class ArquivosESocial {
     public String s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) throws IOException {
       //  query = new QueryArquivos();
      //   String update = query.eventosTerceiraFase("S-1200", cpf, recibo, perApur);
-        String update = String.format(fonte.geteventosTerceiraFase(), recibo, "S-1200", cpf, perApur, perApur);
+        String update = String.format(fonte.getEventosTerceiraFase(), recibo, "S-1200", cpf, perApur, perApur);
      
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
@@ -64,9 +64,9 @@ public class ArquivosESocial {
 
     }
 
-    public String s1210(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
-       query = new QueryArquivos();
-        String update = query.eventosTerceiraFase("S-1210",cpf, recibo, perApur);
+    public String s1210(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) throws IOException {
+       //query = new QueryArquivos();
+        String update = String.format(fonte.getEventosTerceiraFase(), recibo, "S-1210", cpf, perApur, perApur);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);

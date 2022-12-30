@@ -42,7 +42,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private ServidoresBases basesbanco;
     private boolean insert;
     private FonteDados fonteDadosArquivos = new FonteDados();
-    private String  fonte =  String.format("Texto: %s", 5);
+    private String  fonteTipo = null;
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
@@ -63,6 +63,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         \\resultado%s.sql", date.getTime() + date.getDay() + date.getYear()); */
         caminhoSQL.setText(caminhoarquivoResultado);
 
+    }
+    
+    public void salvarFonteDados() throws IOException{
+        if(fonteTipo != null){
+            if(fonteTipo.equals("S-1200")){
+                fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
+            }
+        }
     }
 
     public void opcoesDefaConfigu() {
@@ -286,6 +294,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         fonteDados = new javax.swing.JTextPane();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -528,16 +539,26 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setText("S-2200");
+
+        jButton6.setText("S-2299");
+
+        jButton7.setText("S-3000");
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addComponent(jButton3)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6)
+                    .addComponent(jButton7))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton4)
@@ -548,7 +569,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
@@ -646,16 +674,21 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         
         try {
-            fonteDados.setText(fonteDadosArquivos.geteventosTerceiraFase());
+            fonteDados.setText(fonteDadosArquivos.getEventosTerceiraFase());
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        fonteTipo = "S-1200";
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       fonte = String.format(fonteDados.getText(), 5);
+        try {
+            salvarFonteDados();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
                
               
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -714,6 +747,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

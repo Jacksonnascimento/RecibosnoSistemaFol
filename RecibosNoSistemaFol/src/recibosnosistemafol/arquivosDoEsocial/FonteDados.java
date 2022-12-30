@@ -5,9 +5,11 @@
 package recibosnosistemafol.arquivosDoEsocial;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -27,7 +29,7 @@ public class FonteDados {
       caminho + "\\Fontes de dados\\eventosTerceiraFase.txt");
     }
     
-    public String geteventosTerceiraFase() throws FileNotFoundException, IOException{
+    public String getEventosTerceiraFase() throws FileNotFoundException, IOException{
         FileReader fr = new FileReader(arquivoEventosTerceiraFase);
         BufferedReader br = new BufferedReader(fr);
         String textoArquivo = "";
@@ -39,6 +41,16 @@ public class FonteDados {
         br.close();
         fr.close();
         return textoArquivo;
+    }
+    
+    public void setEventosTerceiraFase(String fonte) throws IOException{
+        arquivoEventosTerceiraFase.delete();
+        FileWriter fw = new FileWriter(arquivoEventosTerceiraFase, true);
+        BufferedWriter bw = new BufferedWriter(fw);
+        bw.write(fonte);
+        bw.newLine();
+        bw.close();
+        fw.close();
     }
     
 }
