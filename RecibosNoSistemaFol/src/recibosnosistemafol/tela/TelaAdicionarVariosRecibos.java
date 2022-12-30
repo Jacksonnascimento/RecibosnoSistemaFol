@@ -67,9 +67,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     
     public void salvarFonteDados() throws IOException{
         if(fonteTipo != null){
-            if(fonteTipo.equals("S-1200")){
+            if(fonteTipo.equals("terceiraFase")){
                 fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
-            }
+            } else if (fonteTipo.equals("s2200")){
+                fonteDadosArquivos.setEventoS2200(fonteDados.getText());
+        }
         }
     }
 
@@ -540,6 +542,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         });
 
         jButton5.setText("S-2200");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton6.setText("S-2299");
 
@@ -679,7 +686,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        fonteTipo = "S-1200";
+        fonteTipo = "terceiraFase";
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -692,6 +699,16 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                
               
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventoS2200());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        fonteTipo = "s2200";
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
