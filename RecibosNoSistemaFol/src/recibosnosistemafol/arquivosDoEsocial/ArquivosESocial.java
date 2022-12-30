@@ -4,6 +4,8 @@
  */
 package recibosnosistemafol.arquivosDoEsocial;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
 import recibosnosistemafol.banco.BancoDados;
 
 /**
@@ -14,6 +16,14 @@ public class ArquivosESocial {
 
     BancoDados banco;
     QueryArquivos query;
+    FonteDados fonte;
+
+    public ArquivosESocial() throws URISyntaxException {
+         fonte = new FonteDados();
+    }
+    
+    
+   
 
     public String s2200(String matricula, String recibo, String servidor, String database, String user, String senha) {
         query = new QueryArquivos();
@@ -40,10 +50,11 @@ public class ArquivosESocial {
 
     }
 
-    public String s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) {
-        query = new QueryArquivos();
-        String update = query.eventosTerceiraFase("S-1200", cpf, recibo, perApur);
-
+    public String s1200(String cpf, String recibo, String perApur, String servidor, String database, String user, String senha) throws IOException {
+      //  query = new QueryArquivos();
+     //   String update = query.eventosTerceiraFase("S-1200", cpf, recibo, perApur);
+        String update = String.format(fonte.geteventosTerceiraFase(), recibo, "S-1200", cpf, perApur, perApur);
+     
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
             banco.update(update);

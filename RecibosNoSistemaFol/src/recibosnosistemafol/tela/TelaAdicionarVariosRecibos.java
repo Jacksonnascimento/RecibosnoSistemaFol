@@ -24,6 +24,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import recibosnosistemafol.ArquivoXML;
 import recibosnosistemafol.arquivosDoEsocial.ArquivosESocial;
+import recibosnosistemafol.arquivosDoEsocial.FonteDados;
 import recibosnosistemafol.bases.ServidoresBases;
 
 /**
@@ -40,6 +41,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private String caminhoDist;
     private ServidoresBases basesbanco;
     private boolean insert;
+    private FonteDados fonteDadosArquivos = new FonteDados();
     private String  fonte =  String.format("Texto: %s", 5);
 
     /**
@@ -122,7 +124,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         bases.setModel(model);
     }
 
-    public void addRecibosBanco() throws IOException {
+    public void addRecibosBanco() throws IOException, URISyntaxException {
 
         String arquivoUpdate = "";
 
@@ -512,7 +514,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         jScrollPane3.setViewportView(fonteDados);
 
-        jButton3.setText("S-1200");
+        jButton3.setText("3ª fase");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
@@ -636,13 +638,20 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             addRecibosBanco();
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        fonteDados.setText(fonte);
         
-        String.format("Texto: %s", 5);
+        try {
+            fonteDados.setText(fonteDadosArquivos.geteventosTerceiraFase());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
