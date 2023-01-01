@@ -39,7 +39,7 @@ public class ArquivosESocial {
 
     public String s2299(String matricula, String recibo, String servidor, String database, String user, String senha) throws IOException {
        // query = new QueryArquivos();       
-        String update = String.format(fonte.getEventoS2299(), matricula, recibo);
+        String update = String.format(fonte.getEventoS2299(), recibo, matricula);
     
 
         if (!"txt".equals(servidor)) {
