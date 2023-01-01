@@ -37,9 +37,10 @@ public class ArquivosESocial {
         return update;
     }
 
-    public String s2299(String matricula, String recibo, String servidor, String database, String user, String senha) {
-        query = new QueryArquivos();       
-        String update = query.s2299(matricula, recibo);
+    public String s2299(String matricula, String recibo, String servidor, String database, String user, String senha) throws IOException {
+       // query = new QueryArquivos();       
+        String update = String.format(fonte.getEventoS2299(), matricula, recibo);
+    
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
@@ -77,9 +78,9 @@ public class ArquivosESocial {
 
     }
     
-    public String s3000(String recibo, String servidor, String database, String user, String senha) {
-        query = new QueryArquivos();
-        String update = query.s3000(recibo);
+    public String s3000(String recibo, String servidor, String database, String user, String senha) throws IOException {
+        //query = new QueryArquivos();
+        String update = String.format(fonte.getEventoS3000(), recibo);
 
         if (!"txt".equals(servidor)) {
             banco = new BancoDados(servidor, database, user, senha);
