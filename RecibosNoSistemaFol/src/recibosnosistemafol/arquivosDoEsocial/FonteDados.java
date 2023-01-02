@@ -31,9 +31,7 @@ public class FonteDados {
         String caminhoDoEvento = caminho + "\\Fontes de dados\\";
         if (tipoEvento.equals("eventosTerceiraFase")) {
             caminhoDoEvento += "eventosTerceiraFase.txt";
-            System.out.println("teceira");
         } else if (tipoEvento.equals("s2200")) {
-            System.out.println("S2200");
             caminhoDoEvento += "eventoS2200.txt";
         } else if (tipoEvento.equals("s2299")) {
             caminhoDoEvento += "eventoS2299.txt";
