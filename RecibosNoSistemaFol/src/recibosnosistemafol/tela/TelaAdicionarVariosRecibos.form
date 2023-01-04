@@ -297,7 +297,11 @@
                               <Component id="jButton1" min="-2" pref="138" max="-2" attributes="0"/>
                           </Group>
                       </Group>
+<<<<<<< HEAD
                       <EmptySpace pref="243" max="32767" attributes="0"/>
+=======
+                      <EmptySpace pref="117" max="32767" attributes="0"/>
+>>>>>>> 67c9e63ab5d7feb1d6769b934efcb0fcf440a32d
                   </Group>
               </Group>
             </DimensionLayout>
@@ -497,6 +501,10 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
+<<<<<<< HEAD
+=======
+                      <EmptySpace pref="48" max="32767" attributes="0"/>
+>>>>>>> 67c9e63ab5d7feb1d6769b934efcb0fcf440a32d
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>

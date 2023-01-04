@@ -42,7 +42,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private ServidoresBases basesbanco;
     private boolean insert;
     private FonteDados fonteDadosArquivos = new FonteDados();
-    private String  fonteTipo = null;
+    private String fonteTipo = null;
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
@@ -59,25 +59,25 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         String caminhoarquivoResultado
                 = caminhoDist + "\\ArquivoRe";
-        /*
-        \\resultado%s.sql", date.getTime() + date.getDay() + date.getYear()); */
+
         caminhoSQL.setText(caminhoarquivoResultado);
 
     }
-    
-    public void salvarFonteDados() throws IOException{
+
+    public void salvarFonteDados() throws IOException {
         if (fonteTipo != null) {
             if (fonteTipo.equals("terceiraFase")) {
-                fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
+                fonteDadosArquivos.setFonteEvento("eventosTerceiraFase", fonteDados.getText());
             } else if (fonteTipo.equals("s2200")) {
-                fonteDadosArquivos.setEventoS2200(fonteDados.getText());
+                fonteDadosArquivos.setFonteEvento("s2200", fonteDados.getText());
             } else if (fonteTipo.equals("s2299")) {
-                fonteDadosArquivos.setEventoS2299(fonteDados.getText());
+                fonteDadosArquivos.setFonteEvento("s2299", fonteDados.getText());
             } else if (fonteTipo.equals("s3000")) {
-                fonteDadosArquivos.setEventoS3000(fonteDados.getText());
+                fonteDadosArquivos.setFonteEvento("s3000", fonteDados.getText());
             }
         }
     }
+
     public void opcoesDefaConfigu() {
         s2200.setSelected(true);
         s2299.setSelected(true);
@@ -238,7 +238,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         if ("txt".equals(servidor) && cont > 0) {
             Date date = new Date();
-            //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
+
             FileWriter arquivoResultado = new FileWriter(String.format("%s//resultado%s.sql",
                     caminhoSQL.getText(),
                     date.getTime()
@@ -488,7 +488,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(133, 133, 133)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+<<<<<<< HEAD
                 .addContainerGap(243, Short.MAX_VALUE))
+=======
+                .addContainerGap(117, Short.MAX_VALUE))
+>>>>>>> 67c9e63ab5d7feb1d6769b934efcb0fcf440a32d
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -608,6 +612,10 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
+<<<<<<< HEAD
+=======
+                .addContainerGap(48, Short.MAX_VALUE)
+>>>>>>> 67c9e63ab5d7feb1d6769b934efcb0fcf440a32d
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(20, 20, 20)
@@ -759,13 +767,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+
         try {
-            fonteDados.setText(fonteDadosArquivos.getEventosTerceiraFase());
+            fonteDados.setText(fonteDadosArquivos.getFonteEvento("eventosTerceiraFase"));
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         fonteTipo = "terceiraFase";
 
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -776,37 +784,37 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-               
-              
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
-            fonteDados.setText(fonteDadosArquivos.getEventoS2200());
+            fonteDados.setText(fonteDadosArquivos.getFonteEvento("s2200"));
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         fonteTipo = "s2200";
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         try {
-            fonteDados.setText(fonteDadosArquivos.getEventoS2299());
+            fonteDados.setText(fonteDadosArquivos.getFonteEvento("s2299"));
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         fonteTipo = "s2299";
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-            fonteDados.setText(fonteDadosArquivos.getEventoS3000());
+            fonteDados.setText(fonteDadosArquivos.getFonteEvento("s3000"));
         } catch (IOException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         fonteTipo = "s3000";
     }//GEN-LAST:event_jButton7ActionPerformed
 
