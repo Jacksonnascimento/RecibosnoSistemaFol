@@ -8,7 +8,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 
 /**
@@ -37,15 +39,25 @@ public class CaminhoSalvoArquivos {
     }
     
     public String getCaminhoXML(){
-      return caminhos[0];  
+        if (caminhos == null){
+            return null;
+        } else
+         return caminhos[0];  
     }
     
     public String getCaminhoSQL(){
-      return caminhos[1];   
+        if (caminhos == null){
+            return null;
+        } else
+        return caminhos[1];   
     }
             
-    public void setCaminhos(String caminhoXML, String caminhoSQL){
-       
+    public void setCaminhos(String caminhoXML, String caminhoSQL) throws IOException{
+       String texto = caminhoXML + "," + caminhoSQL;
+       FileWriter arquivoResultado = new FileWriter(arquivoDosCaminhos);
+       PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+       gravarInfoAr.print(texto);
+       arquivoResultado.close();
     }
     
     public void buscarCaminhos() throws FileNotFoundException, IOException {

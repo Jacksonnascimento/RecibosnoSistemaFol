@@ -4,6 +4,7 @@
  */
 package recibosnosistemafol.tela;
 
+import configuracoes.CaminhoSalvoArquivos;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private boolean insert;
     private FonteDados fonteDadosArquivos = new FonteDados();
     private String  fonteTipo = null;
-
+    private CaminhoSalvoArquivos caminhosSalvos = new CaminhoSalvoArquivos ();
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
@@ -52,17 +53,36 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         addBase();
         basesDoBanco();
         opcoesDefaConfigu();
+        caminhosIniciais();
 
+       
+
+    }
+    
+    public void caminhosIniciais() throws URISyntaxException{
         caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
         caminho.setText(caminhoDist + "\\ArquivosXML");
 
         String caminhoarquivoResultado
                 = caminhoDist + "\\ArquivoRe";
-        /*
-        \\resultado%s.sql", date.getTime() + date.getDay() + date.getYear()); */
+
         caminhoSQL.setText(caminhoarquivoResultado);
 
+        caminhoSalvo();
+    }
+    
+    public void caminhoSalvo(){
+        System.out.println("Passou aqui");
+        
+        
+        if(caminhosSalvos.getCaminhoSQL() != null && caminhosSalvos.getCaminhoSQL() != ""){
+            caminhoSQL.setText(caminhosSalvos.getCaminhoSQL());
+        } 
+        
+        if(caminhosSalvos.getCaminhoXML()!= null && caminhosSalvos.getCaminhoXML()!= ""){
+            caminho.setText(caminhosSalvos.getCaminhoXML());
+        }
     }
     
     public void salvarFonteDados() throws IOException{
@@ -305,9 +325,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         codOrg = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
-        caminhoSalvoArquivo = new javax.swing.JTextField();
+        caminhoSalvoArquivoXML = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        caminhoSalvoSQL = new javax.swing.JTextField();
+        caminhoSalvoArquivoSQL = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -608,6 +628,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jLabel5.setText("Arquivo SQL");
 
         jButton8.setText("Salvar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -620,8 +645,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(37, 37, 37)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(caminhoSalvoArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
-                    .addComponent(caminhoSalvoSQL))
+                    .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(caminhoSalvoArquivoSQL))
                 .addGap(47, 47, 47)
                 .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -660,11 +685,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(caminhoSalvoArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))))
                 .addGap(31, 31, 31)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(caminhoSalvoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(caminhoSalvoArquivoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addGap(30, 30, 30)
                 .addComponent(jButton8)
@@ -811,6 +836,16 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         fonteTipo = "s3000";
     }//GEN-LAST:event_jButton7ActionPerformed
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        try {
+            caminhosSalvos.setCaminhos(caminhoSalvoArquivoXML.getText(), caminhoSalvoArquivoSQL.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        caminhoSalvo();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -856,8 +891,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JList<String> bases;
     private javax.swing.JTextField caminho;
     private javax.swing.JTextField caminhoSQL;
-    private javax.swing.JTextField caminhoSalvoArquivo;
-    private javax.swing.JTextField caminhoSalvoSQL;
+    private javax.swing.JTextField caminhoSalvoArquivoSQL;
+    private javax.swing.JTextField caminhoSalvoArquivoXML;
     private javax.swing.JTextField codOrg;
     private javax.swing.JTextField databaseText;
     private javax.swing.JTextField descText;

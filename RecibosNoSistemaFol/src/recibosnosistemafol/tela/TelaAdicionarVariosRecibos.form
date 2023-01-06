@@ -504,8 +504,8 @@
                       </Group>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="caminhoSalvoArquivo" pref="286" max="32767" attributes="0"/>
-                          <Component id="caminhoSalvoSQL" max="32767" attributes="0"/>
+                          <Component id="caminhoSalvoArquivoXML" pref="286" max="32767" attributes="0"/>
+                          <Component id="caminhoSalvoArquivoSQL" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                       <Component id="jLabel10" min="-2" pref="99" max="-2" attributes="0"/>
@@ -555,14 +555,14 @@
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="caminhoSalvoArquivo" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="caminhoSalvoArquivoXML" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="caminhoSalvoSQL" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="caminhoSalvoArquivoSQL" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
@@ -592,14 +592,14 @@
             </Component>
             <Component class="javax.swing.JSeparator" name="jSeparator3">
             </Component>
-            <Component class="javax.swing.JTextField" name="caminhoSalvoArquivo">
+            <Component class="javax.swing.JTextField" name="caminhoSalvoArquivoXML">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel1">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Arquivo XML"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="caminhoSalvoSQL">
+            <Component class="javax.swing.JTextField" name="caminhoSalvoArquivoSQL">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
@@ -610,6 +610,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Salvar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton8ActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

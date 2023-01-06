@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 
 /**
@@ -62,7 +63,12 @@ public class FonteDados {
         bw.write(fonte);
         bw.newLine();
         bw.close();
-        fw.close();
+        fw.close(); 
+        
+       
+
+        
+        
     }
     
     public String getEventoS2200() throws FileNotFoundException, IOException{
