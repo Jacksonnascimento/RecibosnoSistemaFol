@@ -18,8 +18,8 @@ import javax.swing.JOptionPane;
  */
 public class BancoDados {
 
-    private String connectionUrl;
-    private ResultSet resultSet = null;
+    String connectionUrl;
+    ResultSet resultSet = null;
 
     public BancoDados(String servidor, String database, String user, String senha) {
 
@@ -34,6 +34,7 @@ public class BancoDados {
 
         System.out.println(connectionUrl);
     }
+
 
     public String select(String query, int quantColunas) {
         String resultado = "";
@@ -66,7 +67,7 @@ public class BancoDados {
             prepsInsertProduct.execute();
             System.out.println(query);
             connection.close();
-            //  JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
+          //  JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
         } catch (SQLException e) {
         }
     }

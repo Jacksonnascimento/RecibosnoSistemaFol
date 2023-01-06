@@ -10,11 +10,230 @@ package recibosnosistemafol.tela;
  */
 public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
+<<<<<<< HEAD
+=======
+    private DefaultListModel model = new DefaultListModel();
+    private String servidor;
+    private String database;
+    private String user;
+    private String senha;
+    private String caminhoDist;
+    private ServidoresBases basesbanco;
+    private boolean insert;
+    private FonteDados fonteDadosArquivos = new FonteDados();
+    private String  fonteTipo = null;
+
+>>>>>>> parent of 85c5336 (upp)
     /**
      * Creates new form TelaAdicionarVariosRecibos
      */
     public TelaAdicionarVariosRecibos() {
         initComponents();
+<<<<<<< HEAD
+=======
+        addBase();
+        basesDoBanco();
+        opcoesDefaConfigu();
+
+        caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
+        caminho.setText(caminhoDist + "\\ArquivosXML");
+
+        String caminhoarquivoResultado
+                = caminhoDist + "\\ArquivoRe";
+        /*
+        \\resultado%s.sql", date.getTime() + date.getDay() + date.getYear()); */
+        caminhoSQL.setText(caminhoarquivoResultado);
+
+    }
+    
+    public void salvarFonteDados() throws IOException{
+        if (fonteTipo != null) {
+            if (fonteTipo.equals("terceiraFase")) {
+                fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
+            } else if (fonteTipo.equals("s2200")) {
+                fonteDadosArquivos.setEventoS2200(fonteDados.getText());
+            } else if (fonteTipo.equals("s2299")) {
+                fonteDadosArquivos.setEventoS2299(fonteDados.getText());
+            } else if (fonteTipo.equals("s3000")) {
+                fonteDadosArquivos.setEventoS3000(fonteDados.getText());
+            }
+        }
+    }
+    public void opcoesDefaConfigu() {
+        s2200.setSelected(true);
+        s2299.setSelected(true);
+        s3000.setSelected(true);
+        s1200.setSelected(true);
+        s1210.setSelected(true);
+        insertAtiDes.setSelected(false);
+    }
+
+    public void salvar() throws IOException, URISyntaxException {
+        ServidoresBases bases = new ServidoresBases();
+        bases.caminhoDosArquivos();
+        bases.addbasenoBanco(descText.getText(), servidorText.getText(), databaseText.getText(), usrText.getText(), senhaText.getText());
+        zerarLis();
+        basesDoBanco();
+        descText.setText(null);
+        servidorText.setText(null);
+        databaseText.setText(null);
+        usrText.setText(null);
+        senhaText.setText(null);
+
+    }
+
+    public void addBase() {
+        model = new DefaultListModel();
+        model.addElement("Salvar arquivo.sql");
+        bases.setModel(model);
+
+    }
+
+    public void zerarLis() {
+        model = null;
+        addBase();
+    }
+
+    public void selecionarBase() {
+        if ("Salvar arquivo.sql".equals(bases.getSelectedValue())) {
+            servidor = "txt";
+        } else {
+            ServidoresBases bas = basesbanco.getBaseDesc(bases.getSelectedValue());
+            servidor = bas.getServidor();
+            database = bas.getDatabase();
+            user = bas.getUser();
+            senha = bas.getSenha();
+
+        }
+    }
+
+    public void basesDoBanco() throws IOException, URISyntaxException {
+        basesbanco = new ServidoresBases();
+        basesbanco.caminhoDosArquivos();
+        basesbanco.buscarBasesbanco();
+        for (ServidoresBases base : basesbanco.getBasesBanco()) {
+            model.addElement(base.getDescri());
+        }
+
+        bases.setModel(model);
+    }
+
+    public void addRecibosBanco() throws IOException, URISyntaxException {
+
+        String arquivoUpdate = "";
+
+        selecionarBase();
+
+        String arquivosNaoAdd = "";
+        String caminhoArquivo = caminho.getText();
+        insert = insertAtiDes.isSelected();
+
+        int cont = 0;
+        try ( DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminhoArquivo))) {
+            for (Path file : stream) {
+                File arquivoFile = file.toFile();
+
+                String[] tipo = arquivoFile.getName().split("-");
+                ArquivoXML arquivoXML = new ArquivoXML();
+                arquivoXML.infXML(arquivoFile, tipo[1]);
+
+                ArquivosESocial esocial = new ArquivosESocial();
+
+                if ("evtAdmissao".equals(arquivoXML.getTipoEvento())
+                        || "evtDeslig".equals(arquivoXML.getTipoEvento())
+                        || "evtRemun".equals(arquivoXML.getTipoEvento())
+                        || "evtPgtos".equals(arquivoXML.getTipoEvento())
+                        || "evtExclusao".equals(arquivoXML.getTipoEvento())) {
+
+                    String tipoEvento = arquivoXML.getTipoEvento();
+
+                    if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
+                        cont++;
+                        if (!insert) {
+                            arquivoUpdate
+                                    += esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n";
+                        }
+
+                    } else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
+                        cont++;
+                        if (!insert) {
+                            arquivoUpdate
+                                    += esocial.s2299(arquivoXML.getMatricula(),
+                                            arquivoXML.getRecibo(), servidor, database, user, senha)
+                                    + "\n\n";
+                        }
+
+                    } else if ("evtRemun".equals(tipoEvento) && s1200.isSelected()) {
+                        cont++;
+                        if (!insert) {
+                            arquivoUpdate
+                                    += esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(),
+                                            arquivoXML.getPerApur(), servidor, database, user, senha)
+                                    + "\n\n";
+                        } else {
+                            String[] anoMes = arquivoXML.getPerApur().split("-");
+                            int mes = Integer.parseInt(anoMes[1]);
+                            int ano = Integer.parseInt(anoMes[0]);
+                            int codOrg = Integer.parseInt(this.codOrg.getText());
+                            String perApuracao = String.format("%s%s01 ", ano, mes);
+
+                            arquivoUpdate
+                                    += esocial.insertS1200(mes, ano, arquivoXML.getRecibo(),
+                                            codOrg, arquivoXML.getCpf(),
+                                            perApuracao, servidor, database, user, senha)
+                                    + "\n\n";
+                        }
+
+                    } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
+                        cont++;
+                        if (!insert) {
+                            arquivoUpdate
+                                    += esocial.s1210(arquivoXML.getCpf(),
+                                            arquivoXML.getRecibo(),
+                                            arquivoXML.getPerApur(), servidor, database, user, senha)
+                                    + "\n\n";
+                        }
+
+                    } else if ("evtExclusao".equals(tipoEvento) && s3000.isSelected()) {
+                        cont++;
+                        if (!insert) {
+                            arquivoUpdate
+                                    += esocial.s3000(arquivoXML.getNrRecEvt(),
+                                            servidor, database, user, senha) + "\n\n";
+                        }
+
+                    } else {
+                        arquivosNaoAdd += arquivoFile.getName() + "\n";
+                    }
+                }
+            }
+        } catch (IOException | DirectoryIteratorException ex) {
+            System.err.println(ex);
+        } catch (ParserConfigurationException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
+
+        if ("txt".equals(servidor) && cont > 0) {
+            Date date = new Date();
+            //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
+            FileWriter arquivoResultado = new FileWriter(String.format("%s//resultado%s.sql",
+                    caminhoSQL.getText(),
+                    date.getTime()
+                    + date.getDay()
+                    + date.getYear()));
+            PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+
+            gravarInfoAr.printf(arquivoUpdate);
+
+            arquivoResultado.close();
+
+        }
+>>>>>>> parent of 85c5336 (upp)
     }
 
     /**
@@ -28,6 +247,388 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+<<<<<<< HEAD
+=======
+        bases.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(bases);
+
+        jButton2.setText("Adicionar recibos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        s2299.setText("S-2299");
+
+        s2200.setText("S-2200");
+        s2200.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                s2200ActionPerformed(evt);
+            }
+        });
+
+        s1200.setText("S-1200");
+        s1200.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                s1200ActionPerformed(evt);
+            }
+        });
+
+        s1210.setText("S-1210");
+
+        s3000.setText("S-3000");
+
+        jLabel11.setText("XML");
+
+        jLabel12.setText("SQL");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(147, 147, 147)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11)
+                            .addComponent(jLabel12))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(caminho, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                            .addComponent(caminhoSQL))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)))
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(54, 54, 54)
+                    .addComponent(s2200)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(s2299)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(s1200)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(s1210)
+                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(s3000)
+                    .addContainerGap(193, Short.MAX_VALUE)))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(2, 2, 2)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12)
+                    .addComponent(caminhoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton2)
+                .addGap(29, 29, 29))
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(134, 134, 134)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(s2200)
+                        .addComponent(s2299)
+                        .addComponent(s1200)
+                        .addComponent(s1210)
+                        .addComponent(s3000))
+                    .addContainerGap(135, Short.MAX_VALUE)))
+        );
+
+        jTabbedPane2.addTab("Bases", jPanel4);
+
+        jLabel2.setText("Descrição");
+
+        jLabel3.setText("Servidor");
+
+        jLabel6.setText("Database");
+
+        jLabel4.setText("Login");
+
+        senhaText.setText("jPasswordField1");
+
+        jButton1.setText("Salvar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(descText, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(servidorText))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(31, 31, 31)
+                                .addComponent(usrText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(senhaText))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(databaseText, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(243, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(descText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(servidorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(databaseText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(usrText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(senhaText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addContainerGap(72, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Adicionar bases", jPanel1);
+
+        jScrollPane3.setViewportView(fonteDados);
+
+        jButton3.setText("3ª fase");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Salvar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setText("S-2200");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("S-2299");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jButton7.setText("S-3000");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6)
+                    .addComponent(jButton7))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton4)
+                .addGap(156, 156, 156))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addContainerGap(20, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Fonte de dados", jPanel5);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 12)); // NOI18N
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Programa desenvolvido para inserir os recibos do eSocial no sistema\nde folha de pagamento. \nDesenvolvedor: Jackson Santos Nascimento\nE-mail: jacksonnascimento84@hotmail.com\nLinkedIn: www.linkedin.com/in/nascimentojackson/\nRepositório: github.com/Jacksonnascimento/RecibosnoSistemaFol");
+        jScrollPane2.setViewportView(jTextArea1);
+
+        jLabel7.setText("2022");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(202, 202, 202)
+                        .addComponent(jLabel7)))
+                .addContainerGap(160, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel7)
+                .addContainerGap(59, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Sobre", jPanel3);
+
+        insertAtiDes.setText("INSERT");
+        insertAtiDes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                insertAtiDesActionPerformed(evt);
+            }
+        });
+
+        jLabel9.setText("Código do orgão");
+
+        jLabel1.setText("Arquivo XML");
+
+        jLabel5.setText("Arquivo SQL");
+
+        jButton8.setText("Salvar");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(29, 29, 29)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel5))
+                .addGap(37, 37, 37)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(caminhoSalvoArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE)
+                    .addComponent(caminhoSalvoSQL))
+                .addGap(47, 47, 47)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(insertAtiDes)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9)
+                                .addGap(12, 12, 12)
+                                .addComponent(codOrg, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(200, 200, 200)
+                        .addComponent(jButton8)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(insertAtiDes)
+                    .addComponent(jLabel9)
+                    .addComponent(codOrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(jLabel10))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(caminhoSalvoArquivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))))
+                .addGap(31, 31, 31)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(caminhoSalvoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addGap(30, 30, 30)
+                .addComponent(jButton8)
+                .addContainerGap(79, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Configurações", jPanel2);
+
+>>>>>>> parent of 85c5336 (upp)
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -42,6 +643,93 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+<<<<<<< HEAD
+=======
+    private void insertAtiDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertAtiDesActionPerformed
+
+    }//GEN-LAST:event_insertAtiDesActionPerformed
+
+    private void s1200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s1200ActionPerformed
+
+    }//GEN-LAST:event_s1200ActionPerformed
+
+    private void s2200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s2200ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_s2200ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            salvar();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            addRecibosBanco();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventosTerceiraFase());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        fonteTipo = "terceiraFase";
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            salvarFonteDados();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+               
+              
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventoS2200());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        fonteTipo = "s2200";
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventoS2299());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        fonteTipo = "s2299";
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventoS3000());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        fonteTipo = "s3000";
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+>>>>>>> parent of 85c5336 (upp)
     /**
      * @param args the command line arguments
      */
