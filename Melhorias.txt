@@ -1,0 +1,4 @@
+Seletor de pasta para o caminho de retorno;
+Aba para fonte de dados;
+Arquivo para salvar configurações gerais;
+Seletor de pasta para o caminho dos arquivos XML.

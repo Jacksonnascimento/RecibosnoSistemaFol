@@ -38,8 +38,8 @@ public class ArquivoXML {
             Document document = db.parse(file);
             document.getDocumentElement().normalize();
             //System.out.println(document.getDocumentElement().getNodeName());
-            
-            switch(tipoArquivoEve){
+
+            switch (tipoArquivoEve) {
                 case "2200.xml":
                     tipoEvento = "evtAdmissao";
                     break;
@@ -56,9 +56,9 @@ public class ArquivoXML {
                     tipoEvento = "evtExclusao";
                     break;
                 default:
-                tipoEvento = "n";
-                break;
-               
+                    tipoEvento = "n";
+                    break;
+
             }
             if (!"n".equals(tipoEvento)) {
 
