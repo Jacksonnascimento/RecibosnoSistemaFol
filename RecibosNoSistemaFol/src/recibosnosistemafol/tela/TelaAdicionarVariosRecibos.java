@@ -79,11 +79,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
     }
     public void opcoesDefaConfigu() {
-        s2200.setSelected(true);
-        s2299.setSelected(true);
-        s3000.setSelected(true);
-        s1200.setSelected(true);
-        s1210.setSelected(true);
+        s2200.setSelected(false);
+        s2299.setSelected(false);
+        s3000.setSelected(false);
+        s1200.setSelected(false);
+        s1210.setSelected(false);
         insertAtiDes.setSelected(false);
     }
 
@@ -299,10 +299,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         insertAtiDes = new javax.swing.JRadioButton();
         jLabel9 = new javax.swing.JLabel();
@@ -314,6 +310,10 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         caminhoSalvoSQL = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel7 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -594,41 +594,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Fonte de dados", jPanel5);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 12)); // NOI18N
-        jTextArea1.setRows(5);
-        jTextArea1.setText("Programa desenvolvido para inserir os recibos do eSocial no sistema\nde folha de pagamento. \nDesenvolvedor: Jackson Santos Nascimento\nE-mail: jacksonnascimento84@hotmail.com\nLinkedIn: www.linkedin.com/in/nascimentojackson/\nRepositório: github.com/Jacksonnascimento/RecibosnoSistemaFol");
-        jScrollPane2.setViewportView(jTextArea1);
-
-        jLabel7.setText("2022");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(202, 202, 202)
-                        .addComponent(jLabel7)))
-                .addContainerGap(160, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jLabel7)
-                .addContainerGap(59, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Sobre", jPanel3);
-
         insertAtiDes.setText("INSERT");
         insertAtiDes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -667,6 +632,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
                                 .addComponent(insertAtiDes)
                                 .addGap(18, 18, 18)
                                 .addComponent(jLabel9)
@@ -702,10 +668,45 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addComponent(jLabel5))
                 .addGap(30, 30, 30)
                 .addComponent(jButton8)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Configurações", jPanel2);
+
+        jTextArea1.setEditable(false);
+        jTextArea1.setColumns(20);
+        jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 12)); // NOI18N
+        jTextArea1.setRows(5);
+        jTextArea1.setText("Programa desenvolvido para inserir os recibos do eSocial no sistema\nde folha de pagamento. \nDesenvolvedor: Jackson Santos Nascimento\nE-mail: jacksonnascimento84@hotmail.com\nLinkedIn: www.linkedin.com/in/nascimentojackson/\nRepositório: github.com/Jacksonnascimento/RecibosnoSistemaFol");
+        jScrollPane2.setViewportView(jTextArea1);
+
+        jLabel7.setText("2022");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(202, 202, 202)
+                        .addComponent(jLabel7)))
+                .addContainerGap(160, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(27, 27, 27)
+                .addComponent(jLabel7)
+                .addContainerGap(59, Short.MAX_VALUE))
+        );
+
+        jTabbedPane2.addTab("Sobre", jPanel3);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
