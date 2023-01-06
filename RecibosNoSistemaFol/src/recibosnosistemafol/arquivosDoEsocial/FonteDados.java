@@ -15,7 +15,7 @@ import java.net.URISyntaxException;
 
 /**
  *
- * @author jacks
+ * @author Jackson
  */
 public class FonteDados {
     private String caminho;
