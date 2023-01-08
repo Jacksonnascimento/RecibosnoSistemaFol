@@ -92,7 +92,10 @@ public class FonteDados {
         bw.write(fonte);
         bw.newLine();
         bw.close();
-        fw.close();
+        fw.close(); 
+       
+        
+        
     }
     
     public String getEventoS2299() throws FileNotFoundException, IOException{

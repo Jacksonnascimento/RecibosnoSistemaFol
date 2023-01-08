@@ -56,7 +56,7 @@ public class CaminhoSalvoArquivos {
        String texto = caminhoXML + "," + caminhoSQL;
        FileWriter arquivoResultado = new FileWriter(arquivoDosCaminhos);
        PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
-       gravarInfoAr.print(texto);
+       gravarInfoAr.printf(texto);
        arquivoResultado.close();
     }
     
