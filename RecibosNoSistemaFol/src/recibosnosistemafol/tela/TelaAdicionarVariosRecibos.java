@@ -260,16 +260,20 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         if ("txt".equals(servidor) && cont > 0) {
             Date date = new Date();
             //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
-            FileWriter arquivoResultado = new FileWriter(String.format("%s//resultado%s.sql",
+            String caminhoNomeArquivo = String.format("%s//resultado%s.sql",
                     caminhoSalvoArquivoSQL.getText(),
                     date.getTime()
                     + date.getDay()
-                    + date.getYear()));
+                    + date.getYear());
+            FileWriter arquivoResultado = new FileWriter(caminhoNomeArquivo);
             PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
 
             gravarInfoAr.printf(arquivoUpdate);
 
             arquivoResultado.close();
+            
+            ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
+            processBuilder.start();
 
         }
     }
