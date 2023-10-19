@@ -47,6 +47,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private String  fonteTipo = null;
     private CaminhoSalvoArquivos caminhosSalvos;
     private String caminhoAbrir;
+    
 
   
     /**
@@ -58,7 +59,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         basesDoBanco();
         opcoesDefaConfigu();
         caminhosIniciais();
-        
+        setResizable(false);
+      
        
 
     }
@@ -106,6 +108,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         
        listaResultados(caminhoarquivoResultado, null);
         caminhoSalvo();
+        
+        bases.setSelectedValue("Salvar arquivo.sql", true);
     }
     
     private void listaResultados(String caminhoarquivoResultado, String pesquisa){
@@ -150,7 +154,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         s3000.setSelected(true);
         s1200.setSelected(true);
         s1210.setSelected(true);
-        insertAtiDes.setSelected(false);
+       
     }
 
     public void salvar() throws IOException, URISyntaxException {
@@ -211,7 +215,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         String arquivosNaoAdd = "";
         String caminhoArquivo = caminho.getText();
-        insert = insertAtiDes.isSelected();
+       
 
         int cont = 0;
         try ( DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminhoArquivo))) {
@@ -259,14 +263,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                             String[] anoMes = arquivoXML.getPerApur().split("-");
                             int mes = Integer.parseInt(anoMes[1]);
                             int ano = Integer.parseInt(anoMes[0]);
-                            int codOrg = Integer.parseInt(this.codOrg.getText());
+               
                             String perApuracao = String.format("%s%s01 ", ano, mes);
 
                             arquivoUpdate
-                                    += esocial.insertS1200(mes, ano, arquivoXML.getRecibo(),
-                                            codOrg, arquivoXML.getCpf(),
-                                            perApuracao, servidor, database, user, senha)
-                                    + "\n\n";
+                                    +=  "\n\n";
                         }
 
                     } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
@@ -341,6 +342,18 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         caminho = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        fonteDados = new javax.swing.JTextPane();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        listaArquivosSalvos = new javax.swing.JList<>();
+        jButton9 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         descText = new javax.swing.JTextField();
@@ -352,19 +365,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         usrText = new javax.swing.JTextField();
         senhaText = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        fonteDados = new javax.swing.JTextPane();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        insertAtiDes = new javax.swing.JRadioButton();
-        jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        codOrg = new javax.swing.JTextField();
         caminhoSalvoArquivoXML = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         caminhoSalvoArquivoSQL = new javax.swing.JTextField();
@@ -377,11 +379,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         s1210 = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
-        jLabel11 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        listaArquivosSalvos = new javax.swing.JList<>();
-        jButton9 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -399,7 +396,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(600, 570));
 
+        jTabbedPane2.setPreferredSize(new java.awt.Dimension(600, 677));
+
+        jPanel4.setPreferredSize(new java.awt.Dimension(600, 293));
         jPanel4.setLayout(new java.awt.BorderLayout());
 
         bases.setModel(new javax.swing.AbstractListModel<String>() {
@@ -428,82 +429,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jPanel4.add(jSeparator1, java.awt.BorderLayout.LINE_END);
 
         jTabbedPane2.addTab("Bases", jPanel4);
-
-        jLabel2.setText("Descrição");
-
-        jLabel3.setText("Servidor");
-
-        jLabel6.setText("Database");
-
-        jLabel4.setText("Login");
-
-        senhaText.setText("jPasswordField1");
-
-        jButton1.setText("Salvar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(descText, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(servidorText))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(31, 31, 31)
-                                .addComponent(usrText, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(senhaText))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(databaseText, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(133, 133, 133)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(272, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(descText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(servidorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(databaseText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(usrText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(senhaText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(226, Short.MAX_VALUE))
-        );
-
-        jTabbedPane2.addTab("Adicionar bases", jPanel1);
 
         jScrollPane3.setViewportView(fonteDados);
 
@@ -547,18 +472,20 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton4)
                     .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jButton3)
                             .addComponent(jButton5)
                             .addComponent(jButton6)
                             .addComponent(jButton7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(174, Short.MAX_VALUE))
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(22, 22, 22))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -576,23 +503,125 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(34, 34, 34))
         );
 
         jTabbedPane2.addTab("Fonte de dados", jPanel5);
 
-        insertAtiDes.setText("S-1200");
-        insertAtiDes.addActionListener(new java.awt.event.ActionListener() {
+        jPanel6.setLayout(new java.awt.BorderLayout());
+
+        listaArquivosSalvos.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane4.setViewportView(listaArquivosSalvos);
+
+        jPanel6.add(jScrollPane4, java.awt.BorderLayout.CENTER);
+
+        jButton9.setText("Abrir");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                insertAtiDesActionPerformed(evt);
+                jButton9ActionPerformed(evt);
+            }
+        });
+        jPanel6.add(jButton9, java.awt.BorderLayout.PAGE_END);
+
+        jTabbedPane2.addTab("Arquivos sql", jPanel6);
+
+        jLabel2.setText("Descrição");
+
+        jLabel3.setText("Servidor");
+
+        jLabel6.setText("Database");
+
+        jLabel4.setText("Login");
+
+        senhaText.setText("jPasswordField1");
+
+        jButton1.setText("Salvar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
-        jLabel9.setText("Código do orgão");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(usrText, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(senhaText, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(databaseText, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(descText, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(servidorText, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
-        jLabel1.setText("Arquivo XML");
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {databaseText, descText, jButton1, servidorText});
 
-        jLabel5.setText("Arquivo SQL");
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(descText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(servidorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(databaseText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(usrText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(senhaText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jButton1)
+                .addGap(20, 20, 20))
+        );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {databaseText, descText, jButton1, servidorText});
+
+        jTabbedPane2.addTab("Adicionar bases", jPanel1);
+
+        caminhoSalvoArquivoXML.setToolTipText("");
+        caminhoSalvoArquivoXML.setName(""); // NOI18N
+        caminhoSalvoArquivoXML.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caminhoSalvoArquivoXMLActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("Caminho dos arquivos XML");
+
+        caminhoSalvoArquivoSQL.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                caminhoSalvoArquivoSQLActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setText("Caminho dos arquivos SQL");
 
         jButton8.setText("Salvar");
         jButton8.addActionListener(new java.awt.event.ActionListener() {
@@ -616,64 +645,67 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         });
 
         s3000.setText("S-3000");
+        s3000.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                s3000ActionPerformed(evt);
+            }
+        });
 
         s2299.setText("S-2299");
 
         s1210.setText("S-1210");
+        s1210.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                s1210ActionPerformed(evt);
+            }
+        });
 
         jLabel8.setText("Arquivos");
-
-        jLabel11.setText("Insert");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(468, 468, 468)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 29, Short.MAX_VALUE))
+                .addGap(14, 14, 14)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                        .addGap(14, 14, 14)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel5))
-                                .addGap(37, 37, 37)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
-                                    .addComponent(caminhoSalvoArquivoSQL)))
-                            .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel11))
-                                .addGap(25, 25, 25)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(insertAtiDes)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel9)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(codOrg, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(s2200)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(s2299)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(s1200)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(s1210)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(s3000))))))
+                            .addComponent(caminhoSalvoArquivoXML)
+                            .addComponent(caminhoSalvoArquivoSQL)
+                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(219, 219, 219)
-                        .addComponent(jButton8)))
+                        .addGap(14, 14, 14)
+                        .addComponent(jLabel8)
+                        .addGap(32, 32, 32)
+                        .addComponent(s2200)
+                        .addGap(28, 28, 28)
+                        .addComponent(s2299)
+                        .addGap(34, 34, 34)
+                        .addComponent(s1200)
+                        .addGap(18, 18, 18)
+                        .addComponent(s1210)
+                        .addGap(18, 18, 18)
+                        .addComponent(s3000))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(633, 633, 633)
+                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
+
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -685,103 +717,50 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     .addComponent(s1210)
                     .addComponent(s3000)
                     .addComponent(jLabel8))
-                .addGap(19, 19, 19)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(insertAtiDes)
-                    .addComponent(jLabel9)
-                    .addComponent(codOrg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel10)
-                    .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel5)
                 .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(caminhoSalvoArquivoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
+                .addComponent(caminhoSalvoArquivoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton8)
-                .addContainerGap(231, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
+
+        caminhoSalvoArquivoXML.getAccessibleContext().setAccessibleName("");
 
         jTabbedPane2.addTab("Configurações", jPanel2);
 
-        jPanel6.setLayout(new java.awt.BorderLayout());
-
-        listaArquivosSalvos.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane4.setViewportView(listaArquivosSalvos);
-
-        jPanel6.add(jScrollPane4, java.awt.BorderLayout.CENTER);
-
-        jButton9.setText("Abrir");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
-            }
-        });
-        jPanel6.add(jButton9, java.awt.BorderLayout.PAGE_END);
-
-        jTabbedPane2.addTab("Arquivos sql", jPanel6);
+        jPanel3.setLayout(new java.awt.BorderLayout());
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
-        jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 12)); // NOI18N
+        jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 14)); // NOI18N
         jTextArea1.setRows(5);
-        jTextArea1.setText("Programa desenvolvido para inserir os recibos do eSocial no sistema\nde folha de pagamento. \nDesenvolvedor: Jackson Santos Nascimento\nE-mail: jacksonnascimento84@hotmail.com\nLinkedIn: www.linkedin.com/in/nascimentojackson/\nRepositório: github.com/Jacksonnascimento/RecibosnoSistemaFol");
+        jTextArea1.setText("Programa desenvolvido para inserir os recibos do eSocial no sistema de \nfolha de pagamento. \n\n\n \tDesenvolvedor: Jackson Santos Nascimento\n\tE-mail: jacksonnascimento84@hotmail.com\n\tLinkedIn: www.linkedin.com/in/nascimentojackson/\n\tRepositório: github.com/Jacksonnascimento/RecibosnoSistemaFol\n\n\n");
         jScrollPane2.setViewportView(jTextArea1);
 
-        jLabel7.setText("2022");
+        jPanel3.add(jScrollPane2, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(202, 202, 202)
-                        .addComponent(jLabel7)))
-                .addContainerGap(189, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jLabel7)
-                .addContainerGap(214, Short.MAX_VALUE))
-        );
+        jLabel7.setText("                                                                                                  2022");
+        jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel3.add(jLabel7, java.awt.BorderLayout.PAGE_END);
 
         jTabbedPane2.addTab("Sobre", jPanel3);
 
-        getContentPane().add(jTabbedPane2, java.awt.BorderLayout.PAGE_START);
+        getContentPane().add(jTabbedPane2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void insertAtiDesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_insertAtiDesActionPerformed
-
-    }//GEN-LAST:event_insertAtiDesActionPerformed
-
-    private void s1200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s1200ActionPerformed
-
-    }//GEN-LAST:event_s1200ActionPerformed
-
-    private void s2200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s2200ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_s2200ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
@@ -857,22 +836,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         fonteTipo = "s3000";
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        try {
-            caminhosSalvos.setCaminhos(caminhoSalvoArquivoXML.getText(), caminhoSalvoArquivoSQL.getText());
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        try {
-            caminhoSalvo();
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton8ActionPerformed
-
     private void caminhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminhoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_caminhoActionPerformed
@@ -891,6 +854,46 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
       }
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void s1200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s1200ActionPerformed
+
+    }//GEN-LAST:event_s1200ActionPerformed
+
+    private void s2200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s2200ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_s2200ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        try {
+            caminhosSalvos.setCaminhos(caminhoSalvoArquivoXML.getText(), caminhoSalvoArquivoSQL.getText());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        try {
+            caminhoSalvo();
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void caminhoSalvoArquivoSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminhoSalvoArquivoSQLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_caminhoSalvoArquivoSQLActionPerformed
+
+    private void caminhoSalvoArquivoXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminhoSalvoArquivoXMLActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_caminhoSalvoArquivoXMLActionPerformed
+
+    private void s1210ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s1210ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_s1210ActionPerformed
+
+    private void s3000ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s3000ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_s3000ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -938,11 +941,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JTextField caminho;
     private javax.swing.JTextField caminhoSalvoArquivoSQL;
     private javax.swing.JTextField caminhoSalvoArquivoXML;
-    private javax.swing.JTextField codOrg;
     private javax.swing.JTextField databaseText;
     private javax.swing.JTextField descText;
     private javax.swing.JTextPane fonteDados;
-    private javax.swing.JRadioButton insertAtiDes;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -955,7 +956,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -963,7 +963,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
