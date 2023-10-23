@@ -12,6 +12,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.DosFileAttributes;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,8 @@ public class ServidoresBases {
     private ArrayList<ServidoresBases> basesBanco = new ArrayList<>();
     private String caminhoDist;
     private File arquivo;
+    DosFileAttributeView attributes; 
+    DosFileAttributes attrs;
 
     public void addBase(String descri, String servidor, String database, String user, String senha) {
         this.descri = descri;
@@ -50,7 +55,11 @@ public class ServidoresBases {
         if (!existe) {
             arquivo.createNewFile();
         }
-
+        
+        attributes = Files.getFileAttributeView(arquivo.toPath(), DosFileAttributeView.class);
+        attrs = attributes.readAttributes();
+        attributes.setHidden(true);
+        
     }
 
     public void addbasenoBanco(String descri, String servidor, String database, String user, String senha) throws IOException {

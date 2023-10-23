@@ -12,6 +12,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.DosFileAttributes;
 
 /**
  *
@@ -21,6 +24,8 @@ public class CaminhoSalvoArquivos {
     private String caminhoArquivoDosCaminhos;
     private File arquivoDosCaminhos;
     private String [] caminhos;
+    DosFileAttributeView attributes; 
+    DosFileAttributes attrs; 
     
 
     public CaminhoSalvoArquivos() throws URISyntaxException, IOException {
@@ -29,6 +34,7 @@ public class CaminhoSalvoArquivos {
         
         arquivoDosCaminhos = new File(caminhoArquivoDosCaminhos + "\\Arquivo dos Caminhos.txt");
         
+        
         boolean existe = arquivoDosCaminhos.exists();
         
         if (!existe) {
@@ -36,6 +42,9 @@ public class CaminhoSalvoArquivos {
         }
      
         buscarCaminhos();
+        attributes = Files.getFileAttributeView(arquivoDosCaminhos.toPath(), DosFileAttributeView.class);
+        attrs = attributes.readAttributes();
+        attributes.setHidden(true);
     }
     
     public String getCaminhoXML(){
@@ -53,11 +62,13 @@ public class CaminhoSalvoArquivos {
     }
             
     public void setCaminhos(String caminhoXML, String caminhoSQL) throws IOException{
+       attributes.setHidden(false);
        String texto = caminhoXML + "," + caminhoSQL;
        FileWriter arquivoResultado = new FileWriter(arquivoDosCaminhos);
        PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
        gravarInfoAr.printf(texto);
        arquivoResultado.close();
+       attributes.setHidden(true);
     }
     
     public void buscarCaminhos() throws FileNotFoundException, IOException {

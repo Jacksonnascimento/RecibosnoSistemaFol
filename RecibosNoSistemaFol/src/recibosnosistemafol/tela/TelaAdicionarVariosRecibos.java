@@ -18,6 +18,8 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.DosFileAttributeView;
+import java.nio.file.attribute.DosFileAttributes;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -77,8 +79,21 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         
         String imagemCaminho = caminhoImagens + "\\esocial-logo.png";
         
+        
         ImageIcon icone = new ImageIcon(imagemCaminho);
         this.setIconImage(icone.getImage());
+        
+          File fileImagem = new File(imagemCaminho);
+          DosFileAttributeView attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class); 
+          DosFileAttributes attrs  = attributes.readAttributes();
+          attributes.setHidden(true);
+          
+          fileImagem = new File(caminhoImagens + "esocial-logo.ico");
+          attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class);
+          attrs  = attributes.readAttributes();
+          attributes.setHidden(true);
+          
+          
         
     }
 
