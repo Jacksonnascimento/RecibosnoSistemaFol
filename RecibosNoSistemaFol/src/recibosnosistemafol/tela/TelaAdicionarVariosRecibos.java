@@ -5,11 +5,14 @@
 package recibosnosistemafol.tela;
 
 import configuracoes.CaminhoSalvoArquivos;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -20,7 +23,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
@@ -59,9 +64,25 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         opcoesDefaConfigu();
         caminhosIniciais();
         setResizable(false);
+        setTitle("Recibos do eSocial");
+        imagemIco();
         
+      
 
     }
+
+    public void imagemIco() throws URISyntaxException, IOException {
+        String caminhoImagens = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+        caminhoImagens = caminhoImagens.substring(1, caminhoImagens.lastIndexOf('/') + 1);
+        
+        String imagemCaminho = caminhoImagens + "\\esocial-logo.png";
+        
+        ImageIcon icone = new ImageIcon(imagemCaminho);
+        this.setIconImage(icone.getImage());
+        
+    }
+
+ 
 
     public DefaultListModel listaArquivos(String caminhoArquivo, String pesquisa) {
         String nomeArquivo = "";
@@ -86,23 +107,22 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     }
                 }
             }
-            
-            
+
             Pattern pattern = Pattern.compile("\\d+");
             Matcher mathcer = pattern.matcher(nomeArquivo);
-            if(mathcer.find()){
+            if (mathcer.find()) {
                 String numeroEncontrato = mathcer.group();
                 contagemNomeArquivo = Integer.parseInt(numeroEncontrato) + 1;
             } else {
                 contagemNomeArquivo = 1;
             }
             return listaModel;
-            
+
         } else {
             System.out.println("O diretório especificado não existe ou não é uma pasta.");
             return null;
         }
-        
+
     }
 
     public void caminhosIniciais() throws URISyntaxException, IOException {
