@@ -18,8 +18,9 @@ public class ArquivosESocial {
     QueryArquivos query;
     FonteDados fonte;
 
-    public ArquivosESocial() throws URISyntaxException {
+    public ArquivosESocial(boolean insert) throws URISyntaxException {
          fonte = new FonteDados();
+         fonte.iniciarCaminhodosEventos(insert);
     }
     
     

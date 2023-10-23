@@ -254,7 +254,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     ArquivoXML arquivoXML = new ArquivoXML();
                     arquivoXML.infXML(arquivoFile, tipo[1]);
 
-                    ArquivosESocial esocial = new ArquivosESocial();
+                    ArquivosESocial esocial = new ArquivosESocial(fazerInsert.isSelected());
 
                     if ("evtAdmissao".equals(arquivoXML.getTipoEvento())
                             || "evtDeslig".equals(arquivoXML.getTipoEvento())
@@ -377,6 +377,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        fazerInsert = new javax.swing.JCheckBox();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         listaArquivosSalvos = new javax.swing.JList<>();
@@ -494,6 +495,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             }
         });
 
+        fazerInsert.setText("Insert");
+        fazerInsert.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                fazerInsertMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -502,6 +510,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addContainerGap()
+                        .addComponent(fazerInsert)
+                        .addGap(32, 32, 32)
                         .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel5Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
@@ -529,7 +539,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                         .addComponent(jButton7))
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton4)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton4)
+                    .addComponent(fazerInsert))
                 .addGap(34, 34, 34))
         );
 
@@ -635,19 +647,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         caminhoSalvoArquivoXML.setToolTipText("");
         caminhoSalvoArquivoXML.setName(""); // NOI18N
-        caminhoSalvoArquivoXML.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caminhoSalvoArquivoXMLActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("Caminho dos arquivos XML");
-
-        caminhoSalvoArquivoSQL.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caminhoSalvoArquivoSQLActionPerformed(evt);
-            }
-        });
 
         jLabel5.setText("Caminho dos arquivos SQL");
 
@@ -659,34 +660,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         });
 
         s2200.setText("S-2200");
-        s2200.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                s2200ActionPerformed(evt);
-            }
-        });
 
         s1200.setText("S-1200");
-        s1200.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                s1200ActionPerformed(evt);
-            }
-        });
 
         s3000.setText("S-3000");
-        s3000.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                s3000ActionPerformed(evt);
-            }
-        });
 
         s2299.setText("S-2299");
 
         s1210.setText("S-1210");
-        s1210.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                s1210ActionPerformed(evt);
-            }
-        });
 
         jLabel8.setText("Arquivos");
 
@@ -883,14 +864,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void s1200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s1200ActionPerformed
-
-    }//GEN-LAST:event_s1200ActionPerformed
-
-    private void s2200ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s2200ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_s2200ActionPerformed
-
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         try {
             caminhosSalvos.setCaminhos(caminhoSalvoArquivoXML.getText(), caminhoSalvoArquivoSQL.getText());
@@ -907,21 +880,14 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void caminhoSalvoArquivoSQLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminhoSalvoArquivoSQLActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caminhoSalvoArquivoSQLActionPerformed
-
-    private void caminhoSalvoArquivoXMLActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminhoSalvoArquivoXMLActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caminhoSalvoArquivoXMLActionPerformed
-
-    private void s1210ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s1210ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_s1210ActionPerformed
-
-    private void s3000ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_s3000ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_s3000ActionPerformed
+    private void fazerInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fazerInsertMouseClicked
+        try {
+            fonteDadosArquivos = new FonteDados();
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        fonteDadosArquivos.iniciarCaminhodosEventos(fazerInsert.isSelected());
+    }//GEN-LAST:event_fazerInsertMouseClicked
 
     /**
      * @param args the command line arguments
@@ -971,6 +937,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JTextField caminhoSalvoArquivoXML;
     private javax.swing.JTextField databaseText;
     private javax.swing.JTextField descText;
+    private javax.swing.JCheckBox fazerInsert;
     private javax.swing.JTextPane fonteDados;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
