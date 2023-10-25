@@ -5,6 +5,7 @@
 package recibosnosistemafol.tela;
 
 import configuracoes.CaminhoSalvoArquivos;
+import java.awt.FlowLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
@@ -28,7 +29,9 @@ import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import recibosnosistemafol.ArquivoXML;
@@ -55,6 +58,10 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private CaminhoSalvoArquivos caminhosSalvos;
     private String caminhoAbrir;
     private int contagemNomeArquivo = 0;
+    String arquivoUpdate;
+    String arquivosNaoAdd;
+    int cont;
+    int quantidadeArquivo;
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
@@ -68,36 +75,29 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         setResizable(false);
         setTitle("Recibos do eSocial");
         imagemIco();
-        
-      
 
     }
 
     public void imagemIco() throws URISyntaxException, IOException {
         String caminhoImagens = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         caminhoImagens = caminhoImagens.substring(1, caminhoImagens.lastIndexOf('/') + 1);
-        
+
         String imagemCaminho = caminhoImagens + "\\esocial-logo.png";
-        
-        
+
         ImageIcon icone = new ImageIcon(imagemCaminho);
         this.setIconImage(icone.getImage());
-        
-          File fileImagem = new File(imagemCaminho);
-          DosFileAttributeView attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class); 
-          DosFileAttributes attrs  = attributes.readAttributes();
-          attributes.setHidden(true);
-          
-          fileImagem = new File(caminhoImagens + "esocial-logo.ico");
-          attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class);
-          attrs  = attributes.readAttributes();
-          attributes.setHidden(true);
-          
-          
-        
-    }
 
- 
+        File fileImagem = new File(imagemCaminho);
+        DosFileAttributeView attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class);
+        DosFileAttributes attrs = attributes.readAttributes();
+        attributes.setHidden(true);
+
+        fileImagem = new File(caminhoImagens + "esocial-logo.ico");
+        attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class);
+        attrs = attributes.readAttributes();
+        attributes.setHidden(true);
+
+    }
 
     public DefaultListModel listaArquivos(String caminhoArquivo, String pesquisa) {
         String nomeArquivo = "";
@@ -252,118 +252,184 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     public void addRecibosBanco() throws IOException, URISyntaxException {
 
-        String arquivoUpdate = "";
+        arquivoUpdate = "";
 
         selecionarBase();
 
-        String arquivosNaoAdd = "";
-        String caminhoArquivo = caminho.getText();
+        arquivosNaoAdd = "";
 
-        int cont = 0;
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminhoArquivo))) {
-            for (Path file : stream) {
-                File arquivoFile = file.toFile();
-                if (arquivoFile.getName().contains(".xml")) {
-
-                    String[] tipo = arquivoFile.getName().split("-");
-                    ArquivoXML arquivoXML = new ArquivoXML();
-                    arquivoXML.infXML(arquivoFile, tipo[1]);
-
-                    ArquivosESocial esocial = new ArquivosESocial(fazerInsert.isSelected());
-
-                    if ("evtAdmissao".equals(arquivoXML.getTipoEvento())
-                            || "evtDeslig".equals(arquivoXML.getTipoEvento())
-                            || "evtRemun".equals(arquivoXML.getTipoEvento())
-                            || "evtPgtos".equals(arquivoXML.getTipoEvento())
-                            || "evtExclusao".equals(arquivoXML.getTipoEvento())) {
-
-                        String tipoEvento = arquivoXML.getTipoEvento();
-
-                        if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
-                            cont++;
-                            if (!insert) {
-                                arquivoUpdate
-                                        += esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n";
-                            }
-
-                        } else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
-                            cont++;
-                            if (!insert) {
-                                arquivoUpdate
-                                        += esocial.s2299(arquivoXML.getMatricula(),
-                                                arquivoXML.getRecibo(), servidor, database, user, senha)
-                                        + "\n\n";
-                            }
-
-                        } else if ("evtRemun".equals(tipoEvento) && s1200.isSelected()) {
-                            cont++;
-                            if (!insert) {
-                                arquivoUpdate
-                                        += esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(),
-                                                arquivoXML.getPerApur(), servidor, database, user, senha)
-                                        + "\n\n";
-                            } else {
-                                String[] anoMes = arquivoXML.getPerApur().split("-");
-                                int mes = Integer.parseInt(anoMes[1]);
-                                int ano = Integer.parseInt(anoMes[0]);
-
-                                String perApuracao = String.format("%s%s01 ", ano, mes);
-
-                                arquivoUpdate
-                                        += "\n\n";
-                            }
-
-                        } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
-                            cont++;
-                            if (!insert) {
-                                arquivoUpdate
-                                        += esocial.s1210(arquivoXML.getCpf(),
-                                                arquivoXML.getRecibo(),
-                                                arquivoXML.getPerApur(), servidor, database, user, senha)
-                                        + "\n\n";
-                            }
-
-                        } else if ("evtExclusao".equals(tipoEvento) && s3000.isSelected()) {
-                            cont++;
-                            if (!insert) {
-                                arquivoUpdate
-                                        += esocial.s3000(arquivoXML.getNrRecEvt(),
-                                                servidor, database, user, senha) + "\n\n";
-                            }
-
-                        } else {
-                            arquivosNaoAdd += arquivoFile.getName() + "\n";
+        quantidadeArquivo = 0;
+        File diretorio = new File(caminho.getText());
+        if (diretorio.isDirectory()) {
+            File[] arquivos = diretorio.listFiles();
+            if (arquivos != null) {
+                for (File arquivo : arquivos) {
+                    if (arquivo.isFile()) {
+                        if (arquivo.getName().contains("S-2200.xml") && s2200.isSelected()) {
+                            quantidadeArquivo++;
                         }
+                        if (arquivo.getName().contains("S-2299.xml") && s2299.isSelected()) {
+                            quantidadeArquivo++;
+                        }
+                        if (arquivo.getName().contains("S-3000.xml") && s3000.isSelected()) {
+                            quantidadeArquivo++;
+                        }
+                        if (arquivo.getName().contains("S-1200.xml") && s1200.isSelected()) {
+                            quantidadeArquivo++;
+                        }
+                        if (arquivo.getName().contains("S-1210.xml") && s1210.isSelected()) {
+                            quantidadeArquivo++;
+                        }
+
                     }
                 }
             }
-        } catch (IOException | DirectoryIteratorException ex) {
-            System.err.println(ex);
-        } catch (ParserConfigurationException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SAXException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
+        JFrame frame = new JFrame("Barra de Progresso. Registros a serem gerados: " + quantidadeArquivo);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 100);
+        frame.setLayout(new FlowLayout());
 
-        if ("txt".equals(servidor) && cont > 0) {
-            Date date = new Date();
-            //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
-            String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
-                    caminhoSalvoArquivoSQL.getText(),
-                    contagemNomeArquivo);
-            FileWriter arquivoResultado = new FileWriter(caminhoNomeArquivo);
-            PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+        JProgressBar progressBar = new JProgressBar(0, quantidadeArquivo);
+        progressBar.setValue(0);
+        progressBar.setStringPainted(true); // Exibir porcentagem
 
-            gravarInfoAr.printf(arquivoUpdate);
+        Thread progressThread = new Thread(() -> {
+            cont = 0;
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminho.getText()))) {
+                for (Path file : stream) {
+                    
+                    File arquivoFile = file.toFile();
+                    if (arquivoFile.getName().contains(".xml")) {
 
-            arquivoResultado.close();
+                        String[] tipo = arquivoFile.getName().split("-");
+                        ArquivoXML arquivoXML = new ArquivoXML();
+                        arquivoXML.infXML(arquivoFile, tipo[1]);
 
-            ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
-            processBuilder.start();
+                        ArquivosESocial esocial = new ArquivosESocial(fazerInsert.isSelected());
 
-        }
+                        if ("evtAdmissao".equals(arquivoXML.getTipoEvento())
+                                || "evtDeslig".equals(arquivoXML.getTipoEvento())
+                                || "evtRemun".equals(arquivoXML.getTipoEvento())
+                                || "evtPgtos".equals(arquivoXML.getTipoEvento())
+                                || "evtExclusao".equals(arquivoXML.getTipoEvento())) {
+
+                            String tipoEvento = arquivoXML.getTipoEvento();
+
+                            if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
+                                cont++;
+                                progressBar.setValue(cont);
+                                if (!insert) {
+                                    arquivoUpdate
+                                            += esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n";
+                                }
+
+                            } else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
+                                cont++;
+                                progressBar.setValue(cont);
+                                if (!insert) {
+                                    arquivoUpdate
+                                            += esocial.s2299(arquivoXML.getMatricula(),
+                                                    arquivoXML.getRecibo(), servidor, database, user, senha)
+                                            + "\n\n";
+                                }
+
+                            } else if ("evtRemun".equals(tipoEvento) && s1200.isSelected()) {
+                                cont++;
+                                progressBar.setValue(cont);
+                                if (!insert) {
+                                    arquivoUpdate
+                                            += esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(),
+                                                    arquivoXML.getPerApur(), servidor, database, user, senha)
+                                            + "\n\n";
+                                } else {
+                                    String[] anoMes = arquivoXML.getPerApur().split("-");
+                                    int mes = Integer.parseInt(anoMes[1]);
+                                    int ano = Integer.parseInt(anoMes[0]);
+
+                                    String perApuracao = String.format("%s%s01 ", ano, mes);
+
+                                    arquivoUpdate
+                                            += "\n\n";
+                                }
+
+                            } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
+                                cont++;
+                                progressBar.setValue(cont);
+                                if (!insert) {
+                                    arquivoUpdate
+                                            += esocial.s1210(arquivoXML.getCpf(),
+                                                    arquivoXML.getRecibo(),
+                                                    arquivoXML.getPerApur(), servidor, database, user, senha)
+                                            + "\n\n";
+                                }
+
+                            } else if ("evtExclusao".equals(tipoEvento) && s3000.isSelected()) {
+                                cont++;
+                                progressBar.setValue(cont);
+                                if (!insert) {
+                                    arquivoUpdate
+                                            += esocial.s3000(arquivoXML.getNrRecEvt(),
+                                                    servidor, database, user, senha) + "\n\n";
+                                }
+
+                            } else {
+                                arquivosNaoAdd += arquivoFile.getName() + "\n";
+                            }
+                            
+                            frame.setTitle(" Barra de Progresso - " + cont + " de " + quantidadeArquivo);
+                        }
+                    }
+                }
+            } catch (IOException | DirectoryIteratorException ex) {
+                System.err.println(ex);
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (cont == 0) {
+                JOptionPane.showMessageDialog(null, "Não há registro a ser gerado");
+
+            } else {
+                JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
+            }
+
+            System.out.println(cont);
+            System.out.println(quantidadeArquivo);
+            if (cont == quantidadeArquivo) {
+                frame.setVisible(false);
+                if ("txt".equals(servidor) && cont > 0) {
+                    Date date = new Date();
+                    //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
+                    String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
+                            caminhoSalvoArquivoSQL.getText(),
+                            contagemNomeArquivo);
+                    FileWriter arquivoResultado;
+                    try {
+                        arquivoResultado = new FileWriter(caminhoNomeArquivo);
+                        PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+                        gravarInfoAr.printf(arquivoUpdate);
+                        arquivoResultado.close();
+                        ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
+                        processBuilder.start();
+                        
+                    } catch (IOException ex) {
+                        Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                }
+
+            }
+        });
+
+        progressThread.start();
+        frame.add(progressBar);
+        frame.setVisible(true);
+        
     }
 
     /**
