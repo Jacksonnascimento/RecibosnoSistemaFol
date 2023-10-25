@@ -108,7 +108,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         String nomeArquivo = "";
         // Crie um objeto File para representar a pasta
         File diretorio = new File(caminhoArquivo);
-
+        contagemNomeArquivo = 1;
         // Verifique se o diretório existe
         if (diretorio.exists() && diretorio.isDirectory()) {
             // Obtenha a lista de arquivos na pasta
@@ -119,6 +119,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 if (arquivo.isFile()) {
                     nomeArquivo = arquivo.getName();
                     if (nomeArquivo.contains(".sql")) {
+                        contagemNomeArquivo++;
+                        //System.out.println(contagemNomeArquivo);
                         if (pesquisa == null || pesquisa == "") {
                             listaModel.addElement(nomeArquivo);
                         } else if (nomeArquivo.toLowerCase().contains(pesquisa.toLowerCase())) {
@@ -128,14 +130,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 }
             }
 
-            Pattern pattern = Pattern.compile("\\d+");
-            Matcher mathcer = pattern.matcher(nomeArquivo);
-            if (mathcer.find()) {
-                String numeroEncontrato = mathcer.group();
-                contagemNomeArquivo = Integer.parseInt(numeroEncontrato) + 1;
-            } else {
-                contagemNomeArquivo = 1;
-            }
+           
             return listaModel;
 
         } else {
@@ -401,16 +396,17 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             } catch (URISyntaxException ex) {
                 Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
             }
+                
                 JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
                 textoBarra.setVisible(false);
                 jProgressBar1.setVisible(false);
-
+                
             
             if (cont == quantidadeArquivo) {
                // frame.setVisible(false);
                 if ("txt".equals(servidor) && cont > 0) {
-                    Date date = new Date();
                     //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
+                    listaResultados(caminhoAbrir, null);
                     String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
                             caminhoSalvoArquivoSQL.getText(),
                             contagemNomeArquivo);
@@ -476,6 +472,15 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         usrText = new javax.swing.JTextField();
         senhaText = new javax.swing.JPasswordField();
         jButton1 = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        fonteDados = new javax.swing.JTextPane();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        fazerInsert = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         caminhoSalvoArquivoXML = new javax.swing.JTextField();
@@ -490,15 +495,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         s1210 = new javax.swing.JRadioButton();
         jLabel8 = new javax.swing.JLabel();
         jSeparator4 = new javax.swing.JSeparator();
-        jPanel5 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        fonteDados = new javax.swing.JTextPane();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        fazerInsert = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -518,6 +514,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(600, 570));
 
         jTabbedPane2.setPreferredSize(new java.awt.Dimension(600, 677));
+        jTabbedPane2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane2MouseClicked(evt);
+            }
+        });
 
         jPanel4.setPreferredSize(new java.awt.Dimension(600, 293));
 
@@ -690,112 +691,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Adicionar bases", jPanel1);
 
-        caminhoSalvoArquivoXML.setToolTipText("");
-        caminhoSalvoArquivoXML.setName(""); // NOI18N
-
-        jLabel1.setText("Caminho dos arquivos XML");
-
-        jLabel5.setText("Caminho dos arquivos SQL");
-
-        jButton8.setText("Salvar");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
-        s2200.setText("S-2200");
-
-        s1200.setText("S-1200");
-
-        s3000.setText("S-3000");
-
-        s2299.setText("S-2299");
-
-        s1210.setText("S-1210");
-
-        jLabel8.setText("Arquivos");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(caminhoSalvoArquivoXML)
-                                    .addComponent(caminhoSalvoArquivoSQL)
-                                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel8)
-                                .addGap(32, 32, 32)
-                                .addComponent(s2200)
-                                .addGap(28, 28, 28)
-                                .addComponent(s2299)
-                                .addGap(34, 34, 34)
-                                .addComponent(s1200)
-                                .addGap(18, 18, 18)
-                                .addComponent(s1210)
-                                .addGap(18, 18, 18)
-                                .addComponent(s3000))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(633, 633, 633)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)))))
-                .addContainerGap())
-        );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
-
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(s2200)
-                    .addComponent(s2299)
-                    .addComponent(s1200)
-                    .addComponent(s1210)
-                    .addComponent(s3000)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(caminhoSalvoArquivoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8)
-                .addContainerGap())
-        );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
-
-        caminhoSalvoArquivoXML.getAccessibleContext().setAccessibleName("");
-
-        jTabbedPane2.addTab("Configurações", jPanel2);
-
         jScrollPane3.setViewportView(fonteDados);
 
         jButton3.setText("3ª fase");
@@ -885,6 +780,110 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Fonte de dados", jPanel5);
 
+        caminhoSalvoArquivoXML.setToolTipText("");
+        caminhoSalvoArquivoXML.setName(""); // NOI18N
+
+        jLabel1.setText("Caminho dos arquivos XML");
+
+        jLabel5.setText("Caminho dos arquivos SQL");
+
+        jButton8.setText("Salvar");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
+        s2200.setText("S-2200");
+
+        s1200.setText("S-1200");
+
+        s3000.setText("S-3000");
+
+        s2299.setText("S-2299");
+
+        s1210.setText("S-1210");
+
+        jLabel8.setText("Arquivos");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(caminhoSalvoArquivoXML)
+                                    .addComponent(caminhoSalvoArquivoSQL)
+                                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel8)
+                                .addGap(32, 32, 32)
+                                .addComponent(s2200)
+                                .addGap(28, 28, 28)
+                                .addComponent(s2299)
+                                .addGap(34, 34, 34)
+                                .addComponent(s1200)
+                                .addGap(18, 18, 18)
+                                .addComponent(s1210)
+                                .addGap(18, 18, 18)
+                                .addComponent(s3000))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(633, 633, 633)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
+
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(s2200)
+                    .addComponent(s2299)
+                    .addComponent(s1200)
+                    .addComponent(s1210)
+                    .addComponent(s3000)
+                    .addComponent(jLabel8))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(jLabel5)
+                .addGap(18, 18, 18)
+                .addComponent(caminhoSalvoArquivoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton8)
+                .addContainerGap())
+        );
+
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
+
+        caminhoSalvoArquivoXML.getAccessibleContext().setAccessibleName("");
+
+        jTabbedPane2.addTab("Configurações", jPanel2);
+
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 14)); // NOI18N
@@ -936,7 +935,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        listaResultados(caminhoAbrir, null);
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1034,6 +1033,10 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         }
         fonteDadosArquivos.iniciarCaminhodosEventos(fazerInsert.isSelected());
     }//GEN-LAST:event_fazerInsertMouseClicked
+
+    private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
+        listaResultados(caminhoAbrir, null);
+    }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     /**
      * @param args the command line arguments
