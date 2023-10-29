@@ -17,11 +17,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import recibosnosistemafol.ArquivoXML;
@@ -168,10 +170,14 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     public void salvarFonteDados() throws IOException {
         if (fonteTipo != null) {
             switch (fonteTipo) {
-                case "terceiraFase" -> fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
-                case "s2200" -> fonteDadosArquivos.setEventoS2200(fonteDados.getText());
-                case "s2299" -> fonteDadosArquivos.setEventoS2299(fonteDados.getText());
-                case "s3000" -> fonteDadosArquivos.setEventoS3000(fonteDados.getText());
+                case "terceiraFase" ->
+                    fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
+                case "s2200" ->
+                    fonteDadosArquivos.setEventoS2200(fonteDados.getText());
+                case "s2299" ->
+                    fonteDadosArquivos.setEventoS2299(fonteDados.getText());
+                case "s3000" ->
+                    fonteDadosArquivos.setEventoS3000(fonteDados.getText());
                 default -> {
                 }
             }
@@ -242,7 +248,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         arquivoUpdate = "";
 
         selecionarBase();
-        
+
         quantidadeArquivo = 0;
         File diretorio = new File(caminho.getText());
         if (diretorio.isDirectory()) {
@@ -300,8 +306,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                                 if (((("evtAdmissao".equals(arquivoXML.getTipoEvento()) || "evtDeslig".equals(ArquivoXML.getTipoEvento())) || "evtRemun".equals(ArquivoXML.getTipoEvento())) || "evtPgtos".equals(ArquivoXML.getTipoEvento()))
                                         || "evtExclusao".equals(ArquivoXML.getTipoEvento())) {
                                     String tipoEvento = ArquivoXML.getTipoEvento();
-                                    
-                                    
+
                                     if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
                                         cont++;
                                         jProgressBar1.setValue(cont);
@@ -309,7 +314,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                                         arquivoUpdate += esocial.s2200(ArquivoXML.getMatricula(), ArquivoXML.getRecibo(),
                                                 servidor, database, user, senha) + "\n\n";
 
-                                    }  else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
+                                    } else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
                                         cont++;
                                         jProgressBar1.setValue(cont);
 
@@ -339,8 +344,8 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                                         arquivoUpdate += esocial.s3000(ArquivoXML.getNrRecEvt(),
                                                 servidor, database, user, senha) + "\n\n";
 
-                                    } 
-                                } 
+                                    }
+                                }
                             }
 
                             textoBarra.setText("Processando " + cont + " de " + quantidadeArquivo);
@@ -415,6 +420,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         listaArquivosSalvos = new javax.swing.JList<>();
         jButton9 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         descText = new javax.swing.JTextField();
@@ -547,6 +553,13 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             }
         });
 
+        jButton11.setText("Deletar");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -555,7 +568,8 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)))
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)
+                    .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, 738, Short.MAX_VALUE)))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -563,7 +577,9 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton9)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton11)
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Arquivos sql", jPanel6);
@@ -988,6 +1004,23 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         listaResultados(caminhoAbrir, null);
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // String nomeDoArquivo = listaArquivosSalvos.getSelectedValue();
+        List<String> nomeDoArquivo = listaArquivosSalvos.getSelectedValuesList();
+        if (nomeDoArquivo != null && JOptionPane.showConfirmDialog(null, "Deseja continuar?", "Deletar arquivo", 0) == 0) {
+            for (String item : nomeDoArquivo) {
+                File arquivoDeletar = new File(caminhoAbrir + "\\" + item);
+                if (arquivoDeletar.exists()) {
+                    UIManager.put("OptionPane.yesButtonText", "Sim");
+                    UIManager.put("OptionPane.noButtonText", "Não");
+                    arquivoDeletar.delete();
+                }
+            }
+            listaResultados(caminhoAbrir, null);
+        }
+
+    }//GEN-LAST:event_jButton11ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1035,6 +1068,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JCheckBox fazerInsert;
     private javax.swing.JTextPane fonteDados;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
