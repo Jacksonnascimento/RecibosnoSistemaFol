@@ -5,33 +5,23 @@
 package recibosnosistemafol.tela;
 
 import configuracoes.CaminhoSalvoArquivos;
-import java.awt.FlowLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.DirectoryIteratorException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
-import java.nio.file.attribute.DosFileAttributes;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 import recibosnosistemafol.ArquivoXML;
@@ -43,7 +33,7 @@ import recibosnosistemafol.bases.ServidoresBases;
  *
  * @author Jackson
  */
-public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
+public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     private DefaultListModel model = new DefaultListModel();
     private String servidor;
@@ -52,20 +42,20 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private String senha;
     private String caminhoDist;
     private ServidoresBases basesbanco;
-    private boolean insert;
     private FonteDados fonteDadosArquivos = new FonteDados();
     private String fonteTipo = null;
     private CaminhoSalvoArquivos caminhosSalvos;
     private String caminhoAbrir;
     private int contagemNomeArquivo = 0;
     private String arquivoUpdate;
-    private String arquivosNaoAdd;
     private int cont;
-    int quantidadeArquivo;
-    
+    private int quantidadeArquivo;
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
+     *
+     * @throws java.net.URISyntaxException
+     * @throws java.io.IOException
      */
     public TelaAdicionarVariosRecibos() throws URISyntaxException, IOException {
         initComponents();
@@ -94,18 +84,17 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         File fileImagem = new File(imagemCaminho);
         DosFileAttributeView attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class);
-        DosFileAttributes attrs = attributes.readAttributes();
         attributes.setHidden(true);
 
         fileImagem = new File(caminhoImagens + "esocial-logo.ico");
         attributes = Files.getFileAttributeView(fileImagem.toPath(), DosFileAttributeView.class);
-        attrs = attributes.readAttributes();
+        attributes.readAttributes();
         attributes.setHidden(true);
 
     }
 
     public DefaultListModel listaArquivos(String caminhoArquivo, String pesquisa) {
-        String nomeArquivo = "";
+        String nomeArquivo;
         // Crie um objeto File para representar a pasta
         File diretorio = new File(caminhoArquivo);
         contagemNomeArquivo = 1;
@@ -121,7 +110,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     if (nomeArquivo.contains(".sql")) {
                         contagemNomeArquivo++;
                         //System.out.println(contagemNomeArquivo);
-                        if (pesquisa == null || pesquisa == "") {
+                        if (pesquisa == null || "".equals(pesquisa)) {
                             listaModel.addElement(nomeArquivo);
                         } else if (nomeArquivo.toLowerCase().contains(pesquisa.toLowerCase())) {
                             listaModel.addElement(nomeArquivo);
@@ -130,7 +119,6 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 }
             }
 
-           
             return listaModel;
 
         } else {
@@ -157,9 +145,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }
 
     private void listaResultados(String caminhoarquivoResultado, String pesquisa) {
-        DefaultListModel model = listaArquivos(caminhoarquivoResultado, pesquisa);
-        if (model != null) {
-            listaArquivosSalvos.setModel(model);
+        DefaultListModel modelR = listaArquivos(caminhoarquivoResultado, pesquisa);
+        if (modelR != null) {
+            listaArquivosSalvos.setModel(modelR);
         }
 
     }
@@ -167,11 +155,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     public void caminhoSalvo() throws URISyntaxException, IOException {
         caminhosSalvos = new CaminhoSalvoArquivos();
 
-        if (caminhosSalvos.getCaminhoSQL() != null && caminhosSalvos.getCaminhoSQL() != "") {
+        if (caminhosSalvos.getCaminhoSQL() != null && !"".equals(caminhosSalvos.getCaminhoSQL())) {
             caminhoSalvoArquivoSQL.setText(caminhosSalvos.getCaminhoSQL());
         }
 
-        if (caminhosSalvos.getCaminhoXML() != null && caminhosSalvos.getCaminhoXML() != "") {
+        if (caminhosSalvos.getCaminhoXML() != null && !"".equals(caminhosSalvos.getCaminhoXML())) {
             caminho.setText(caminhosSalvos.getCaminhoXML());
             caminhoSalvoArquivoXML.setText(caminhosSalvos.getCaminhoXML());
         }
@@ -179,14 +167,13 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     public void salvarFonteDados() throws IOException {
         if (fonteTipo != null) {
-            if (fonteTipo.equals("terceiraFase")) {
-                fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
-            } else if (fonteTipo.equals("s2200")) {
-                fonteDadosArquivos.setEventoS2200(fonteDados.getText());
-            } else if (fonteTipo.equals("s2299")) {
-                fonteDadosArquivos.setEventoS2299(fonteDados.getText());
-            } else if (fonteTipo.equals("s3000")) {
-                fonteDadosArquivos.setEventoS3000(fonteDados.getText());
+            switch (fonteTipo) {
+                case "terceiraFase" -> fonteDadosArquivos.setEventosTerceiraFase(fonteDados.getText());
+                case "s2200" -> fonteDadosArquivos.setEventoS2200(fonteDados.getText());
+                case "s2299" -> fonteDadosArquivos.setEventoS2299(fonteDados.getText());
+                case "s3000" -> fonteDadosArquivos.setEventoS3000(fonteDados.getText());
+                default -> {
+                }
             }
         }
     }
@@ -201,9 +188,9 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }
 
     public void salvar() throws IOException, URISyntaxException {
-        ServidoresBases bases = new ServidoresBases();
-        bases.caminhoDosArquivos();
-        bases.addbasenoBanco(descText.getText(), servidorText.getText(), databaseText.getText(), usrText.getText(), senhaText.getText());
+        ServidoresBases basesS = new ServidoresBases();
+        basesS.caminhoDosArquivos();
+        basesS.addbasenoBanco(descText.getText(), servidorText.getText(), databaseText.getText(), usrText.getText(), senhaText.getText());
         zerarLis();
         basesDoBanco();
         descText.setText(null);
@@ -255,9 +242,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         arquivoUpdate = "";
 
         selecionarBase();
-
-        arquivosNaoAdd = "";
-
+        
         quantidadeArquivo = 0;
         File diretorio = new File(caminho.getText());
         if (diretorio.isDirectory()) {
@@ -285,155 +270,124 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 }
             }
         }
-        
-        if(quantidadeArquivo > 0){
-            
-      
-        textoBarra.setVisible(true);
-        jProgressBar1.setMaximum(0);
-        jProgressBar1.setMaximum(quantidadeArquivo);
-        jProgressBar1.setValue(0);
-        jProgressBar1.setStringPainted(true);
-        jProgressBar1.setSize(30, 50);
-       // progressBar.setStringPainted(true); // Exibir porcentagem
 
-        Thread progressThread = new Thread(() -> {
-            cont = 0;
-            jProgressBar1.setVisible(true);
-            try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminho.getText()))) {
-                for (Path file : stream) {
-                    
-                    File arquivoFile = file.toFile();
-                    if (arquivoFile.getName().contains(".xml")) {
+        if (quantidadeArquivo > 0) {
 
-                        String[] tipo = arquivoFile.getName().split("-");
-                        ArquivoXML arquivoXML = new ArquivoXML();
-                        arquivoXML.infXML(arquivoFile, tipo[1]);
+            textoBarra.setVisible(true);
+            jProgressBar1.setMaximum(0);
+            jProgressBar1.setMaximum(quantidadeArquivo);
+            jProgressBar1.setValue(0);
+            jProgressBar1.setStringPainted(true);
+            jProgressBar1.setSize(30, 50);
 
-                        ArquivosESocial esocial = new ArquivosESocial(fazerInsert.isSelected());
+            Thread progressThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    cont = 0;
+                    jProgressBar1.setVisible(true);
+                    try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminho.getText()))) {
+                        for (Path file : stream) {
 
-                        if ("evtAdmissao".equals(arquivoXML.getTipoEvento())
-                                || "evtDeslig".equals(arquivoXML.getTipoEvento())
-                                || "evtRemun".equals(arquivoXML.getTipoEvento())
-                                || "evtPgtos".equals(arquivoXML.getTipoEvento())
-                                || "evtExclusao".equals(arquivoXML.getTipoEvento())) {
+                            File arquivoFile = file.toFile();
+                            if (arquivoFile.getName().contains(".xml")) {
 
-                            String tipoEvento = arquivoXML.getTipoEvento();
+                                String[] tipo = arquivoFile.getName().split("-");
+                                ArquivoXML arquivoXML = new ArquivoXML();
+                                arquivoXML.infXML(arquivoFile, tipo[1]);
 
-                            if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
-                                cont++;
-                                 jProgressBar1.setValue(cont);
-                                if (!insert) {
-                                    arquivoUpdate
-                                            += esocial.s2200(arquivoXML.getMatricula(), arquivoXML.getRecibo(), servidor, database, user, senha) + "\n\n";
-                                }
+                                ArquivosESocial esocial = new ArquivosESocial(fazerInsert.isSelected());
 
-                            } else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
-                                cont++;
-                                 jProgressBar1.setValue(cont);
-                                if (!insert) {
-                                    arquivoUpdate
-                                            += esocial.s2299(arquivoXML.getMatricula(),
-                                                    arquivoXML.getRecibo(), servidor, database, user, senha)
-                                            + "\n\n";
-                                }
+                                if (((("evtAdmissao".equals(arquivoXML.getTipoEvento()) || "evtDeslig".equals(ArquivoXML.getTipoEvento())) || "evtRemun".equals(ArquivoXML.getTipoEvento())) || "evtPgtos".equals(ArquivoXML.getTipoEvento()))
+                                        || "evtExclusao".equals(ArquivoXML.getTipoEvento())) {
+                                    String tipoEvento = ArquivoXML.getTipoEvento();
+                                    
+                                    
+                                    if ("evtAdmissao".equals(tipoEvento) && s2200.isSelected()) {
+                                        cont++;
+                                        jProgressBar1.setValue(cont);
 
-                            } else if ("evtRemun".equals(tipoEvento) && s1200.isSelected()) {
-                                cont++;
-                                 jProgressBar1.setValue(cont);
-                                if (!insert) {
-                                    arquivoUpdate
-                                            += esocial.s1200(arquivoXML.getCpf(), arquivoXML.getRecibo(),
-                                                    arquivoXML.getPerApur(), servidor, database, user, senha)
-                                            + "\n\n";
-                                } else {
-                                    String[] anoMes = arquivoXML.getPerApur().split("-");
-                                    int mes = Integer.parseInt(anoMes[1]);
-                                    int ano = Integer.parseInt(anoMes[0]);
+                                        arquivoUpdate += esocial.s2200(ArquivoXML.getMatricula(), ArquivoXML.getRecibo(),
+                                                servidor, database, user, senha) + "\n\n";
 
-                                    String perApuracao = String.format("%s%s01 ", ano, mes);
+                                    }  else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
+                                        cont++;
+                                        jProgressBar1.setValue(cont);
 
-                                    arquivoUpdate
-                                            += "\n\n";
-                                }
+                                        arquivoUpdate += esocial.s2299(ArquivoXML.getMatricula(),
+                                                ArquivoXML.getRecibo(), servidor, database, user, senha)
+                                                + "\n\n";
 
-                            } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
-                                cont++;
-                                 jProgressBar1.setValue(cont);
-                                if (!insert) {
-                                    arquivoUpdate
-                                            += esocial.s1210(arquivoXML.getCpf(),
-                                                    arquivoXML.getRecibo(),
-                                                    arquivoXML.getPerApur(), servidor, database, user, senha)
-                                            + "\n\n";
-                                }
+                                    } else if ("evtRemun".equals(tipoEvento) && s1200.isSelected()) {
+                                        cont++;
+                                        jProgressBar1.setValue(cont);
 
-                            } else if ("evtExclusao".equals(tipoEvento) && s3000.isSelected()) {
-                                cont++;
-                                 jProgressBar1.setValue(cont);
-                                if (!insert) {
-                                    arquivoUpdate
-                                            += esocial.s3000(arquivoXML.getNrRecEvt(),
-                                                    servidor, database, user, senha) + "\n\n";
-                                }
+                                        arquivoUpdate += esocial.s1200(ArquivoXML.getCpf(), ArquivoXML.getRecibo(),
+                                                ArquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
 
-                            } else {
-                                arquivosNaoAdd += arquivoFile.getName() + "\n";
+                                    } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
+                                        cont++;
+                                        jProgressBar1.setValue(cont);
+
+                                        arquivoUpdate += esocial.s1210(ArquivoXML.getCpf(),
+                                                ArquivoXML.getRecibo(),
+                                                ArquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
+
+                                    } else if ("evtExclusao".equals(tipoEvento) && s3000.isSelected()) {
+                                        cont++;
+                                        jProgressBar1.setValue(cont);
+
+                                        arquivoUpdate += esocial.s3000(ArquivoXML.getNrRecEvt(),
+                                                servidor, database, user, senha) + "\n\n";
+
+                                    } 
+                                } 
                             }
-                            
-                            
+
+                            textoBarra.setText("Processando " + cont + " de " + quantidadeArquivo);
                         }
-                    }
-                    
-                    textoBarra.setText("Processando " + cont + " de "  + quantidadeArquivo);
-                }
-            } catch (IOException | DirectoryIteratorException ex) {
-                System.err.println(ex);
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-                
-                JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
-                textoBarra.setVisible(false);
-                jProgressBar1.setVisible(false);
-                
-            
-            if (cont == quantidadeArquivo) {
-               // frame.setVisible(false);
-                if ("txt".equals(servidor) && cont > 0) {
-                    //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
-                    listaResultados(caminhoAbrir, null);
-                    String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
-                            caminhoSalvoArquivoSQL.getText(),
-                            contagemNomeArquivo);
-                    FileWriter arquivoResultado;
-                    try {
-                        arquivoResultado = new FileWriter(caminhoNomeArquivo);
-                        PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
-                        gravarInfoAr.printf(arquivoUpdate);
-                        arquivoResultado.close();
-                        ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
-                        processBuilder.start();
-                        
-                    } catch (IOException ex) {
+                    } catch (IOException | DirectoryIteratorException ex) {
+                        System.err.println(ex);
+                    } catch (ParserConfigurationException | SAXException | URISyntaxException ex) {
                         Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
+                    JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
+                    textoBarra.setVisible(false);
+                    jProgressBar1.setVisible(false);
+
+                    if (cont == quantidadeArquivo) {
+                        // frame.setVisible(false);
+                        if ("txt".equals(servidor) && cont > 0) {
+                            //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
+                            listaResultados(caminhoAbrir, null);
+                            String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
+                                    caminhoSalvoArquivoSQL.getText(),
+                                    contagemNomeArquivo);
+                            FileWriter arquivoResultado;
+                            try {
+                                arquivoResultado = new FileWriter(caminhoNomeArquivo);
+                                PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+                                gravarInfoAr.printf(arquivoUpdate);
+                                arquivoResultado.close();
+                                ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
+                                processBuilder.start();
+
+                            } catch (IOException ex) {
+                                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+
+                        }
+
+                    }
                 }
+            });
 
-            }
-        });
+            progressThread.start();
 
-        progressThread.start();
-       
         } else {
-            
-         JOptionPane.showMessageDialog(null, "Não há registro a ser gerado");
-        
+
+            JOptionPane.showMessageDialog(null, "Não há registro a ser gerado");
+
         }
     }
 
@@ -565,8 +519,8 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
@@ -919,9 +873,7 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             salvar();
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -929,13 +881,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             addRecibosBanco();
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (URISyntaxException ex) {
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1066,15 +1016,11 @@ public class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                try {
-                    new TelaAdicionarVariosRecibos().setVisible(true);
-                } catch (URISyntaxException ex) {
-                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        java.awt.EventQueue.invokeLater(() -> {
+            try {
+                new TelaAdicionarVariosRecibos().setVisible(true);
+            } catch (URISyntaxException | IOException ex) {
+                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
     }

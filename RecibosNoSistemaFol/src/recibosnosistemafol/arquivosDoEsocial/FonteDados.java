@@ -51,9 +51,8 @@ public class FonteDados {
 
             arquivoS2299 = new File(caminho + "\\Fontes de dados\\eventoS2299.txt");
 
-           
         }
-         arquivoS3000 = new File(caminho + "\\Fontes de dados\\eventoS3000.txt");
+        arquivoS3000 = new File(caminho + "\\Fontes de dados\\eventoS3000.txt");
     }
 
     public String getEventosTerceiraFase() throws FileNotFoundException, IOException {
