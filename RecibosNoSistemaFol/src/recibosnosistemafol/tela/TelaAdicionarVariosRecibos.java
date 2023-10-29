@@ -5,18 +5,16 @@
 package recibosnosistemafol.tela;
 
 import configuracoes.CaminhoSalvoArquivos;
+import configuracoes.SeletorDeArquivosPastas;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.nio.file.DirectoryIteratorException;
-import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.attribute.DosFileAttributeView;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +28,7 @@ import recibosnosistemafol.ArquivoXML;
 import recibosnosistemafol.arquivosDoEsocial.ArquivosESocial;
 import recibosnosistemafol.arquivosDoEsocial.FonteDados;
 import recibosnosistemafol.bases.ServidoresBases;
+import java.util.Collections;
 
 /**
  *
@@ -47,11 +46,12 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private FonteDados fonteDadosArquivos = new FonteDados();
     private String fonteTipo = null;
     private CaminhoSalvoArquivos caminhosSalvos;
-    private String caminhoAbrir;
     private int contagemNomeArquivo = 0;
     private String arquivoUpdate;
     private int cont;
     private int quantidadeArquivo;
+    private File[] aquivosSelecionados;
+    private String caminhoarquivoResultado;
 
     /**
      * Creates new form TelaAdicionarVariosRecibos
@@ -100,27 +100,38 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         // Crie um objeto File para representar a pasta
         File diretorio = new File(caminhoArquivo);
         contagemNomeArquivo = 1;
+        List<Integer> nomesArquivosInt = new ArrayList<>();
         // Verifique se o diretório existe
         if (diretorio.exists() && diretorio.isDirectory()) {
             // Obtenha a lista de arquivos na pasta
             File[] arquivos = diretorio.listFiles();
             DefaultListModel listaModel = new DefaultListModel();
             // Itere sobre a lista de arquivos e imprima seus nomes
+
             for (File arquivo : arquivos) {
                 if (arquivo.isFile()) {
                     nomeArquivo = arquivo.getName();
                     if (nomeArquivo.contains(".sql")) {
                         contagemNomeArquivo++;
                         //System.out.println(contagemNomeArquivo);
-                        if (pesquisa == null || "".equals(pesquisa)) {
-                            listaModel.addElement(nomeArquivo);
-                        } else if (nomeArquivo.toLowerCase().contains(pesquisa.toLowerCase())) {
-                            listaModel.addElement(nomeArquivo);
-                        }
+                        
+                        nomeArquivo = nomeArquivo.replace("Arquivo", "").replace(".sql", "").trim();
+                        int nomeQuantidade = Integer.parseInt(nomeArquivo);
+                        
+                       nomesArquivosInt.add(nomeQuantidade);
+                       // nomesArquivos.add(nomeArquivo);
+                       // listaModel.addElement(nomeArquivo);
+
                     }
                 }
             }
-
+            
+            Collections.sort(nomesArquivosInt);
+            for(int i : nomesArquivosInt){
+                listaModel.addElement("Arquivo " + i + ".sql");
+            }
+                
+            
             return listaModel;
 
         } else {
@@ -133,15 +144,14 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     public void caminhosIniciais() throws URISyntaxException, IOException {
         caminhoDist = TelaAdicionarVariosRecibos.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         caminhoDist = caminhoDist.substring(1, caminhoDist.lastIndexOf('/') + 1);
-        caminho.setText(caminhoDist + "\\ArquivosXML");
-        caminhoSalvoArquivoXML.setText(caminhoDist + "\\ArquivosXML");
-        String caminhoarquivoResultado
-                = caminhoDist + "\\ArquivoRe";
-        caminhoAbrir = caminhoarquivoResultado;
-        caminhoSalvoArquivoSQL.setText(caminhoarquivoResultado);
+        caminhoarquivoResultado = caminhoDist + "\\ArquivoRe";
+        
+        File pasta = new File(caminhoarquivoResultado);
+        if(!pasta.exists()){
+            pasta.mkdir();
+        }
 
         listaResultados(caminhoarquivoResultado, null);
-        caminhoSalvo();
 
         bases.setSelectedValue("Salvar arquivo.sql", true);
     }
@@ -152,19 +162,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             listaArquivosSalvos.setModel(modelR);
         }
 
-    }
-
-    public void caminhoSalvo() throws URISyntaxException, IOException {
-        caminhosSalvos = new CaminhoSalvoArquivos();
-
-        if (caminhosSalvos.getCaminhoSQL() != null && !"".equals(caminhosSalvos.getCaminhoSQL())) {
-            caminhoSalvoArquivoSQL.setText(caminhosSalvos.getCaminhoSQL());
-        }
-
-        if (caminhosSalvos.getCaminhoXML() != null && !"".equals(caminhosSalvos.getCaminhoXML())) {
-            caminho.setText(caminhosSalvos.getCaminhoXML());
-            caminhoSalvoArquivoXML.setText(caminhosSalvos.getCaminhoXML());
-        }
     }
 
     public void salvarFonteDados() throws IOException {
@@ -248,11 +245,12 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         arquivoUpdate = "";
 
         selecionarBase();
+        if (aquivosSelecionados == null) {
+            JOptionPane.showMessageDialog(null, "Selecione um ou mais arquivos XML ou uma pasta que contenha arquivos XML");
+        } else {
+            quantidadeArquivo = 0;
 
-        quantidadeArquivo = 0;
-        File diretorio = new File(caminho.getText());
-        if (diretorio.isDirectory()) {
-            File[] arquivos = diretorio.listFiles();
+            File[] arquivos = aquivosSelecionados;
             if (arquivos != null) {
                 for (File arquivo : arquivos) {
                     if (arquivo.isFile()) {
@@ -275,33 +273,42 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                     }
                 }
             }
-        }
 
-        if (quantidadeArquivo > 0) {
+            if (quantidadeArquivo > 0) {
 
-            textoBarra.setVisible(true);
-            jProgressBar1.setMaximum(0);
-            jProgressBar1.setMaximum(quantidadeArquivo);
-            jProgressBar1.setValue(0);
-            jProgressBar1.setStringPainted(true);
-            jProgressBar1.setSize(30, 50);
+                textoBarra.setVisible(true);
+                jProgressBar1.setMaximum(0);
+                jProgressBar1.setMaximum(quantidadeArquivo);
+                jProgressBar1.setValue(0);
+                jProgressBar1.setStringPainted(true);
+                jProgressBar1.setSize(30, 50);
 
-            Thread progressThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    cont = 0;
-                    jProgressBar1.setVisible(true);
-                    try (DirectoryStream<Path> stream = Files.newDirectoryStream(Paths.get(caminho.getText()))) {
-                        for (Path file : stream) {
+                Thread progressThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        cont = 0;
+                        jProgressBar1.setVisible(true);
+                        for (File file : aquivosSelecionados) {
 
-                            File arquivoFile = file.toFile();
+                            File arquivoFile = file;
                             if (arquivoFile.getName().contains(".xml")) {
 
                                 String[] tipo = arquivoFile.getName().split("-");
                                 ArquivoXML arquivoXML = new ArquivoXML();
-                                arquivoXML.infXML(arquivoFile, tipo[1]);
+                                try {
+                                    arquivoXML.infXML(arquivoFile, tipo[1]);
+                                } catch (ParserConfigurationException ex) {
+                                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SAXException ex) {
+                                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 
-                                ArquivosESocial esocial = new ArquivosESocial(fazerInsert.isSelected());
+                                ArquivosESocial esocial = null;
+                                try {
+                                    esocial = new ArquivosESocial(fazerInsert.isSelected());
+                                } catch (URISyntaxException ex) {
+                                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                }
 
                                 if (((("evtAdmissao".equals(arquivoXML.getTipoEvento()) || "evtDeslig".equals(ArquivoXML.getTipoEvento())) || "evtRemun".equals(ArquivoXML.getTipoEvento())) || "evtPgtos".equals(ArquivoXML.getTipoEvento()))
                                         || "evtExclusao".equals(ArquivoXML.getTipoEvento())) {
@@ -311,38 +318,58 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                                         cont++;
                                         jProgressBar1.setValue(cont);
 
-                                        arquivoUpdate += esocial.s2200(ArquivoXML.getMatricula(), ArquivoXML.getRecibo(),
-                                                servidor, database, user, senha) + "\n\n";
+                                        try {
+                                            arquivoUpdate += esocial.s2200(ArquivoXML.getMatricula(), ArquivoXML.getRecibo(),
+                                                    servidor, database, user, senha) + "\n\n";
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
                                     } else if ("evtDeslig".equals(tipoEvento) && s2299.isSelected()) {
                                         cont++;
                                         jProgressBar1.setValue(cont);
 
-                                        arquivoUpdate += esocial.s2299(ArquivoXML.getMatricula(),
-                                                ArquivoXML.getRecibo(), servidor, database, user, senha)
-                                                + "\n\n";
+                                        try {
+                                            arquivoUpdate += esocial.s2299(ArquivoXML.getMatricula(),
+                                                    ArquivoXML.getRecibo(), servidor, database, user, senha)
+                                                    + "\n\n";
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
                                     } else if ("evtRemun".equals(tipoEvento) && s1200.isSelected()) {
                                         cont++;
                                         jProgressBar1.setValue(cont);
 
-                                        arquivoUpdate += esocial.s1200(ArquivoXML.getCpf(), ArquivoXML.getRecibo(),
-                                                ArquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
+                                        try {
+                                            arquivoUpdate += esocial.s1200(ArquivoXML.getCpf(), ArquivoXML.getRecibo(),
+                                                    ArquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
                                     } else if ("evtPgtos".equals(tipoEvento) && s1210.isSelected()) {
                                         cont++;
                                         jProgressBar1.setValue(cont);
 
-                                        arquivoUpdate += esocial.s1210(ArquivoXML.getCpf(),
-                                                ArquivoXML.getRecibo(),
-                                                ArquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
+                                        try {
+                                            arquivoUpdate += esocial.s1210(ArquivoXML.getCpf(),
+                                                    ArquivoXML.getRecibo(),
+                                                    ArquivoXML.getPerApur(), servidor, database, user, senha) + "\n\n";
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
                                     } else if ("evtExclusao".equals(tipoEvento) && s3000.isSelected()) {
                                         cont++;
                                         jProgressBar1.setValue(cont);
 
-                                        arquivoUpdate += esocial.s3000(ArquivoXML.getNrRecEvt(),
-                                                servidor, database, user, senha) + "\n\n";
+                                        try {
+                                            arquivoUpdate += esocial.s3000(ArquivoXML.getNrRecEvt(),
+                                                    servidor, database, user, senha) + "\n\n";
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
 
                                     }
                                 }
@@ -350,50 +377,48 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
                             textoBarra.setText("Processando " + cont + " de " + quantidadeArquivo);
                         }
-                    } catch (IOException | DirectoryIteratorException ex) {
-                        System.err.println(ex);
-                    } catch (ParserConfigurationException | SAXException | URISyntaxException ex) {
-                        Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-                    }
 
-                    JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
-                    textoBarra.setVisible(false);
-                    jProgressBar1.setVisible(false);
+                        //
+                        JOptionPane.showMessageDialog(null, cont + " arquivo (s) adicionado (s)");
+                        textoBarra.setVisible(false);
+                        jProgressBar1.setVisible(false);
 
-                    if (cont == quantidadeArquivo) {
-                        // frame.setVisible(false);
-                        if ("txt".equals(servidor) && cont > 0) {
-                            //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
-                            listaResultados(caminhoAbrir, null);
-                            String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
-                                    caminhoSalvoArquivoSQL.getText(),
-                                    contagemNomeArquivo);
-                            FileWriter arquivoResultado;
-                            try {
-                                arquivoResultado = new FileWriter(caminhoNomeArquivo);
-                                PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
-                                gravarInfoAr.printf(arquivoUpdate);
-                                arquivoResultado.close();
-                                ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
-                                processBuilder.start();
+                        if (cont == quantidadeArquivo) {
+                            // frame.setVisible(false);
+                            if ("txt".equals(servidor) && cont > 0) {
+                                //resultado%s.sql", date.getTime() + date.getDay() + date.getYear())
+                                listaResultados(caminhoarquivoResultado, null);
+                                String caminhoNomeArquivo = String.format("%s//Arquivo %s.sql",
+                                        caminhoarquivoResultado,
+                                        contagemNomeArquivo);
+                                FileWriter arquivoResultado;
+                                try {
+                                    arquivoResultado = new FileWriter(caminhoNomeArquivo);
+                                    PrintWriter gravarInfoAr = new PrintWriter(arquivoResultado);
+                                    gravarInfoAr.printf(arquivoUpdate);
+                                    arquivoResultado.close();
+                                    ProcessBuilder processBuilder = new ProcessBuilder("notepad.exe", caminhoNomeArquivo);
+                                    processBuilder.start();
 
-                            } catch (IOException ex) {
-                                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IOException ex) {
+                                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
                             }
 
                         }
-
                     }
-                }
-            });
+                });
 
-            progressThread.start();
+                progressThread.start();
 
-        } else {
+            } else {
 
-            JOptionPane.showMessageDialog(null, "Não há registro a ser gerado");
+                JOptionPane.showMessageDialog(null, "Não há registro a ser gerado");
 
-        }
+            }
+
+        } //else JOptionPane.showMessageDialog(null, "Não há registro a ser gerado");
     }
 
     /**
@@ -411,11 +436,17 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         bases = new javax.swing.JList<>();
-        caminho = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jProgressBar1 = new javax.swing.JProgressBar();
         textoBarra = new javax.swing.JLabel();
+        jButton10 = new javax.swing.JButton();
+        jButton12 = new javax.swing.JButton();
+        s2200 = new javax.swing.JRadioButton();
+        s2299 = new javax.swing.JRadioButton();
+        s1200 = new javax.swing.JRadioButton();
+        s3000 = new javax.swing.JRadioButton();
+        s1210 = new javax.swing.JRadioButton();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         listaArquivosSalvos = new javax.swing.JList<>();
@@ -441,20 +472,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         fazerInsert = new javax.swing.JCheckBox();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        caminhoSalvoArquivoXML = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        caminhoSalvoArquivoSQL = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
-        s2200 = new javax.swing.JRadioButton();
-        s1200 = new javax.swing.JRadioButton();
-        s3000 = new javax.swing.JRadioButton();
-        s2299 = new javax.swing.JRadioButton();
-        s1210 = new javax.swing.JRadioButton();
-        jLabel8 = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -471,7 +488,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 570));
 
         jTabbedPane2.setPreferredSize(new java.awt.Dimension(600, 677));
         jTabbedPane2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -489,12 +505,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(bases);
 
-        caminho.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                caminhoActionPerformed(evt);
-            }
-        });
-
         jButton2.setText("Adicionar recibos");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -506,6 +516,30 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         textoBarra.setText("texto");
 
+        jButton10.setText("Seletor de pasta");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
+        jButton12.setText("Seletor de arquivos");
+        jButton12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton12ActionPerformed(evt);
+            }
+        });
+
+        s2200.setText("S-2200");
+
+        s2299.setText("S-2299");
+
+        s1200.setText("1200");
+
+        s3000.setText("S-3000");
+
+        s1210.setText("S-1210");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -513,28 +547,51 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE))
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(textoBarra, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(112, 112, 112))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(textoBarra, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(s3000, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 574, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap(158, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jButton10, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(s2200, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(s2299, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(35, 35, 35)
+                                .addComponent(s1200, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(s1210, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(caminho, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(textoBarra)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(s2200)
+                    .addComponent(s2299)
+                    .addComponent(s1200)
+                    .addComponent(s3000)
+                    .addComponent(s1210))
+                .addGap(24, 24, 24)
+                .addComponent(jButton10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton12)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addContainerGap(186, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Bases", jPanel4);
@@ -579,7 +636,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
                 .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton11)
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(258, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Arquivos sql", jPanel6);
@@ -750,110 +807,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("Fonte de dados", jPanel5);
 
-        caminhoSalvoArquivoXML.setToolTipText("");
-        caminhoSalvoArquivoXML.setName(""); // NOI18N
-
-        jLabel1.setText("Caminho dos arquivos XML");
-
-        jLabel5.setText("Caminho dos arquivos SQL");
-
-        jButton8.setText("Salvar");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
-        s2200.setText("S-2200");
-
-        s1200.setText("S-1200");
-
-        s3000.setText("S-3000");
-
-        s2299.setText("S-2299");
-
-        s1210.setText("S-1210");
-
-        jLabel8.setText("Arquivos");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(caminhoSalvoArquivoXML)
-                                    .addComponent(caminhoSalvoArquivoSQL)
-                                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jLabel8)
-                                .addGap(32, 32, 32)
-                                .addComponent(s2200)
-                                .addGap(28, 28, 28)
-                                .addComponent(s2299)
-                                .addGap(34, 34, 34)
-                                .addComponent(s1200)
-                                .addGap(18, 18, 18)
-                                .addComponent(s1210)
-                                .addGap(18, 18, 18)
-                                .addComponent(s3000))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(633, 633, 633)
-                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(14, 14, 14)
-                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
-        );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
-
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(s2200)
-                    .addComponent(s2299)
-                    .addComponent(s1200)
-                    .addComponent(s1210)
-                    .addComponent(s3000)
-                    .addComponent(jLabel8))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(caminhoSalvoArquivoXML, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(caminhoSalvoArquivoSQL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jLabel10)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8)
-                .addContainerGap())
-        );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {caminhoSalvoArquivoSQL, caminhoSalvoArquivoXML, jButton8});
-
-        caminhoSalvoArquivoXML.getAccessibleContext().setAccessibleName("");
-
-        jTabbedPane2.addTab("Configurações", jPanel2);
-
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setFont(new java.awt.Font("Sitka Heading", 0, 14)); // NOI18N
@@ -870,13 +823,13 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 82, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 32, Short.MAX_VALUE))
+                .addGap(0, 263, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Sobre", jPanel3);
@@ -886,65 +839,18 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
+        listaResultados(caminhoarquivoResultado, null);
+    }//GEN-LAST:event_jTabbedPane2MouseClicked
+
+    private void fazerInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fazerInsertMouseClicked
         try {
-            salvar();
-        } catch (IOException | URISyntaxException ex) {
+            fonteDadosArquivos = new FonteDados();
+        } catch (URISyntaxException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        try {
-            addRecibosBanco();
-        } catch (IOException | URISyntaxException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-        try {
-            fonteDados.setText(fonteDadosArquivos.getEventosTerceiraFase());
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        fonteTipo = "terceiraFase";
-
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        try {
-            salvarFonteDados();
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        try {
-            fonteDados.setText(fonteDadosArquivos.getEventoS2200());
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        fonteTipo = "s2200";
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        try {
-            fonteDados.setText(fonteDadosArquivos.getEventoS2299());
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        fonteTipo = "s2299";
-    }//GEN-LAST:event_jButton6ActionPerformed
+        fonteDadosArquivos.iniciarCaminhodosEventos(fazerInsert.isSelected());
+    }//GEN-LAST:event_fazerInsertMouseClicked
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
@@ -956,9 +862,69 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
         fonteTipo = "s3000";
     }//GEN-LAST:event_jButton7ActionPerformed
 
-    private void caminhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_caminhoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_caminhoActionPerformed
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventoS2299());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        fonteTipo = "s2299";
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventoS2200());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        fonteTipo = "s2200";
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        try {
+            salvarFonteDados();
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+        try {
+            fonteDados.setText(fonteDadosArquivos.getEventosTerceiraFase());
+        } catch (IOException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        fonteTipo = "terceiraFase";
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            salvar();
+        } catch (IOException | URISyntaxException ex) {
+            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        List<String> nomeDoArquivo = listaArquivosSalvos.getSelectedValuesList();
+        if (listaArquivosSalvos.getSelectedValue() != null) {
+            if (nomeDoArquivo != null && JOptionPane.showConfirmDialog(null, "Deseja continuar?", "Deletar arquivo", 0) == 0) {
+                for (String item : nomeDoArquivo) {
+                    File arquivoDeletar = new File(caminhoarquivoResultado + "\\" + item);
+                        if (arquivoDeletar.exists()) {
+                            UIManager.put("OptionPane.yesButtonText", "Sim");
+                            UIManager.put("OptionPane.noButtonText", "Não");
+                            arquivoDeletar.delete();
+                        }
+                    }
+                    listaResultados(caminhoarquivoResultado, null);
+                }
+            }
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         List<String> nomeDoArquivo = listaArquivosSalvos.getSelectedValuesList();
@@ -966,74 +932,46 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             for (String item : nomeDoArquivo) {
 
                 ProcessBuilder processBuilder = new ProcessBuilder(
-                        "notepad.exe", caminhoAbrir + "\\" + item);
+                    "notepad.exe", caminhoarquivoResultado + "\\" + item);
+                    try {
+                        processBuilder.start();
+                    } catch (IOException ex) {
+                        Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+
+            /*  String nomeDoArquivo = listaArquivosSalvos.getSelectedValue();
+            if (nomeDoArquivo != null) {
+                String caminhoArquivoSelecionado = caminhoAbrir + "\\" + nomeDoArquivo;
+                ProcessBuilder processBuilder = new ProcessBuilder(
+                    "notepad.exe", caminhoArquivoSelecionado);
+
                 try {
                     processBuilder.start();
                 } catch (IOException ex) {
                     Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            }
-        }
-
-        /*  String nomeDoArquivo = listaArquivosSalvos.getSelectedValue();
-        if (nomeDoArquivo != null) {
-            String caminhoArquivoSelecionado = caminhoAbrir + "\\" + nomeDoArquivo;
-            ProcessBuilder processBuilder = new ProcessBuilder(
-                    "notepad.exe", caminhoArquivoSelecionado);
-
-            try {
-                processBuilder.start();
-            } catch (IOException ex) {
-                Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } */
+            } */
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+        SeletorDeArquivosPastas seletorArquivos = new SeletorDeArquivosPastas();
+        aquivosSelecionados = seletorArquivos.arquivosSelecionados();
+    }//GEN-LAST:event_jButton12ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        SeletorDeArquivosPastas seletorArquivos = new SeletorDeArquivosPastas();
+        aquivosSelecionados = seletorArquivos.ArquivoPastaSelecionada();
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
-            caminhosSalvos.setCaminhos(caminhoSalvoArquivoXML.getText(), caminhoSalvoArquivoSQL.getText());
-        } catch (IOException ex) {
+            addRecibosBanco();
+        } catch (IOException | URISyntaxException ex) {
             Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        try {
-            caminhoSalvo();
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void fazerInsertMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_fazerInsertMouseClicked
-        try {
-            fonteDadosArquivos = new FonteDados();
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        fonteDadosArquivos.iniciarCaminhodosEventos(fazerInsert.isSelected());
-    }//GEN-LAST:event_fazerInsertMouseClicked
-
-    private void jTabbedPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane2MouseClicked
-        listaResultados(caminhoAbrir, null);
-    }//GEN-LAST:event_jTabbedPane2MouseClicked
-
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        List<String> nomeDoArquivo = listaArquivosSalvos.getSelectedValuesList();
-        if (listaArquivosSalvos.getSelectedValue() != null) {
-            if (nomeDoArquivo != null && JOptionPane.showConfirmDialog(null, "Deseja continuar?", "Deletar arquivo", 0) == 0) {
-                for (String item : nomeDoArquivo) {
-                    File arquivoDeletar = new File(caminhoAbrir + "\\" + item);
-                    if (arquivoDeletar.exists()) {
-                        UIManager.put("OptionPane.yesButtonText", "Sim");
-                        UIManager.put("OptionPane.noButtonText", "Não");
-                        arquivoDeletar.delete();
-                    }
-                }
-                listaResultados(caminhoAbrir, null);
-            }
-        }
-    }//GEN-LAST:event_jButton11ActionPerformed
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1074,34 +1012,27 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JList<String> bases;
-    private javax.swing.JTextField caminho;
-    private javax.swing.JTextField caminhoSalvoArquivoSQL;
-    private javax.swing.JTextField caminhoSalvoArquivoXML;
     private javax.swing.JTextField databaseText;
     private javax.swing.JTextField descText;
     private javax.swing.JCheckBox fazerInsert;
     private javax.swing.JTextPane fonteDados;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
+    private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JDialog jDialog1;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
@@ -1112,7 +1043,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator4;
     private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JList<String> listaArquivosSalvos;

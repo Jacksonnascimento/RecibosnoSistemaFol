@@ -39,7 +39,7 @@ public class CaminhoSalvoArquivos {
         
         if (!existe) {
             arquivoDosCaminhos.createNewFile();
-        }
+        } 
      
         buscarCaminhos();
         attributes = Files.getFileAttributeView(arquivoDosCaminhos.toPath(), DosFileAttributeView.class);
@@ -47,12 +47,6 @@ public class CaminhoSalvoArquivos {
         attributes.setHidden(true);
     }
     
-    public String getCaminhoXML(){
-        if (caminhos == null){
-            return null;
-        } else
-         return caminhos[0];  
-    }
     
     public String getCaminhoSQL(){
         if (caminhos == null){
