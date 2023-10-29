@@ -961,7 +961,21 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }//GEN-LAST:event_caminhoActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        String nomeDoArquivo = listaArquivosSalvos.getSelectedValue();
+        List<String> nomeDoArquivo = listaArquivosSalvos.getSelectedValuesList();
+        if (nomeDoArquivo != null) {
+            for (String item : nomeDoArquivo) {
+
+                ProcessBuilder processBuilder = new ProcessBuilder(
+                        "notepad.exe", caminhoAbrir + "\\" + item);
+                try {
+                    processBuilder.start();
+                } catch (IOException ex) {
+                    Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+        /*  String nomeDoArquivo = listaArquivosSalvos.getSelectedValue();
         if (nomeDoArquivo != null) {
             String caminhoArquivoSelecionado = caminhoAbrir + "\\" + nomeDoArquivo;
             ProcessBuilder processBuilder = new ProcessBuilder(
@@ -972,7 +986,7 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
             } catch (IOException ex) {
                 Logger.getLogger(TelaAdicionarVariosRecibos.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        } */
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -1005,20 +1019,20 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPane2MouseClicked
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // String nomeDoArquivo = listaArquivosSalvos.getSelectedValue();
         List<String> nomeDoArquivo = listaArquivosSalvos.getSelectedValuesList();
-        if (nomeDoArquivo != null && JOptionPane.showConfirmDialog(null, "Deseja continuar?", "Deletar arquivo", 0) == 0) {
-            for (String item : nomeDoArquivo) {
-                File arquivoDeletar = new File(caminhoAbrir + "\\" + item);
-                if (arquivoDeletar.exists()) {
-                    UIManager.put("OptionPane.yesButtonText", "Sim");
-                    UIManager.put("OptionPane.noButtonText", "Não");
-                    arquivoDeletar.delete();
+        if (listaArquivosSalvos.getSelectedValue() != null) {
+            if (nomeDoArquivo != null && JOptionPane.showConfirmDialog(null, "Deseja continuar?", "Deletar arquivo", 0) == 0) {
+                for (String item : nomeDoArquivo) {
+                    File arquivoDeletar = new File(caminhoAbrir + "\\" + item);
+                    if (arquivoDeletar.exists()) {
+                        UIManager.put("OptionPane.yesButtonText", "Sim");
+                        UIManager.put("OptionPane.noButtonText", "Não");
+                        arquivoDeletar.delete();
+                    }
                 }
+                listaResultados(caminhoAbrir, null);
             }
-            listaResultados(caminhoAbrir, null);
         }
-
     }//GEN-LAST:event_jButton11ActionPerformed
 
     /**
