@@ -4,7 +4,7 @@
  */
 package recibosnosistemafol.tela;
 
-import configuracoes.CaminhoSalvoArquivos;
+
 import configuracoes.SeletorDeArquivosPastas;
 
 import java.io.File;
@@ -45,7 +45,6 @@ public final class TelaAdicionarVariosRecibos extends javax.swing.JFrame {
     private ServidoresBases basesbanco;
     private FonteDados fonteDadosArquivos = new FonteDados();
     private String fonteTipo = null;
-    private CaminhoSalvoArquivos caminhosSalvos;
     private int contagemNomeArquivo = 0;
     private String arquivoUpdate;
     private int cont;
