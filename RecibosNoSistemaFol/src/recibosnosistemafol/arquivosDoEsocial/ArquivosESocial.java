@@ -15,7 +15,6 @@ import recibosnosistemafol.banco.BancoDados;
 public class ArquivosESocial {
 
     BancoDados banco;
-    QueryArquivos query;
     FonteDados fonte;
 
     public ArquivosESocial(boolean insert) throws URISyntaxException {
