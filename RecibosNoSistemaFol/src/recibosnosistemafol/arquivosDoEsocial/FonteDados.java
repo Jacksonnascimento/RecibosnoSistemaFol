@@ -97,6 +97,7 @@ public class FonteDados {
     public void setEventoS2200(String fonte) throws IOException {
         arquivoS2200.delete();
         FileWriter fw = new FileWriter(arquivoS2200, true);
+     
         BufferedWriter bw = new BufferedWriter(fw);
         bw.write(fonte);
         bw.newLine();
